@@ -49,6 +49,7 @@ function Toast.show(text: string, kind: string?, seconds: number?)
 		Parent = c,
 	})
 	Make.corner(item, Theme.cornerSmall)
+	Make.outline(item, 3)
 	Make.stroke(item, color, 2, 0.2)
 	Make.padding(item, 12, 8)
 	Make.text({

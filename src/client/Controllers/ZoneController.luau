@@ -36,13 +36,13 @@ function ZoneController:KnitInit()
 		Parent = gui,
 	})
 	Make.corner(promptFrame)
-	Make.stroke(promptFrame, Theme.accent2, 2, 0.4)
+	Make.outline(promptFrame)
+	Make.shadow(promptFrame, 5)
 	Make.padding(promptFrame, 14, 8)
 	Make.list(promptFrame, 2)
-	promptTitle = Make.text({
+	promptTitle = Make.display({
 		Text = "",
-		TextSize = 20,
-		Font = Theme.fontBlack,
+		TextSize = 22,
 		TextXAlignment = Enum.TextXAlignment.Center,
 		Size = UDim2.new(1, 0, 0, 26),
 		Parent = promptFrame,

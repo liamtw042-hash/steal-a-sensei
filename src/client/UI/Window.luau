@@ -39,7 +39,8 @@ function Window.new(name: string, titleText: string, size: UDim2?): Window
 		Parent = gui,
 	})
 	Make.corner(frame)
-	Make.stroke(frame, Theme.accent, 2, 0.5)
+	Make.outline(frame, 4)
+	Make.shadow(frame, 8)
 	Make.new("UISizeConstraint", { MaxSize = Vector2.new(1000, 800), MinSize = Vector2.new(320, 240), Parent = frame })
 
 	local titleBar = Make.frame({
@@ -49,11 +50,10 @@ function Window.new(name: string, titleText: string, size: UDim2?): Window
 		Parent = frame,
 	})
 	Make.corner(titleBar)
-	local title = Make.text({
+	local title = Make.display({
 		Name = "Title",
 		Text = titleText,
-		TextSize = 22,
-		Font = Theme.fontBlack,
+		TextSize = 26,
 		Size = UDim2.new(1, -100, 1, 0),
 		Position = UDim2.fromOffset(16, 0),
 		Parent = titleBar,

@@ -116,14 +116,13 @@ function CombatController:KnitStart()
 	for i, it in items do
 		local btn = Make.button({
 			Text = it.label,
-			Size = UDim2.fromOffset(96, 56),
-			TextSize = 15,
+			Size = UDim2.fromOffset(100, 60),
+			TextSize = 16,
 			BackgroundColor3 = Theme.panel,
 			Parent = bar,
 		}, function()
 			self:Use(it.key)
 		end)
-		Make.stroke(btn, Theme.stroke, 1, 0.8)
 		Make.text({
 			Text = tostring(i),
 			TextSize = 12,

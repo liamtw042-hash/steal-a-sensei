@@ -1,26 +1,29 @@
 --!strict
--- Anime-styled palette: night sky + sakura accents. Change colours here to restyle everything.
+-- Anime-styled palette: deep night panels, sakura + sky accents, chunky rounded shapes.
 local Theme = {
-	bg = Color3.fromRGB(16, 14, 24),
-	panel = Color3.fromRGB(28, 24, 40),
-	panel2 = Color3.fromRGB(42, 36, 60),
-	panel3 = Color3.fromRGB(56, 48, 78),
-	accent = Color3.fromRGB(255, 105, 150), -- sakura
-	accent2 = Color3.fromRGB(110, 200, 255), -- sky
-	gold = Color3.fromRGB(255, 200, 70),
-	green = Color3.fromRGB(110, 220, 130),
-	red = Color3.fromRGB(255, 80, 80),
-	text = Color3.fromRGB(246, 240, 252),
-	muted = Color3.fromRGB(175, 165, 195),
+	bg = Color3.fromRGB(22, 18, 34),
+	panel = Color3.fromRGB(34, 28, 52),
+	panel2 = Color3.fromRGB(48, 40, 72),
+	panel3 = Color3.fromRGB(64, 54, 94),
+	accent = Color3.fromRGB(255, 96, 150), -- sakura
+	accent2 = Color3.fromRGB(90, 205, 255), -- sky
+	gold = Color3.fromRGB(255, 205, 70),
+	green = Color3.fromRGB(100, 230, 130),
+	red = Color3.fromRGB(255, 80, 90),
+	text = Color3.fromRGB(250, 246, 255),
+	muted = Color3.fromRGB(180, 170, 205),
 	stroke = Color3.fromRGB(255, 255, 255),
+	outline = Color3.fromRGB(14, 10, 24), -- chunky dark outline around buttons/panels
+	shadow = Color3.fromRGB(8, 6, 16),
 
-	font = Enum.Font.GothamBold,
-	fontBlack = Enum.Font.GothamBlack,
-	fontBody = Enum.Font.Gotham,
+	font = Enum.Font.FredokaOne, -- chunky rounded display font
+	fontBlack = Enum.Font.FredokaOne,
+	fontBody = Enum.Font.GothamBold,
 
-	corner = 12,
-	cornerSmall = 8,
+	corner = 16,
+	cornerSmall = 12,
 	pad = 12,
+	outlineThickness = 3,
 }
 
 return Theme

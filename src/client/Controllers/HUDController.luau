@@ -49,15 +49,15 @@ function HUDController:KnitInit()
 		Parent = gui,
 	})
 	Make.corner(stats)
-	Make.stroke(stats, Theme.accent, 2, 0.5)
+	Make.outline(stats)
+	Make.shadow(stats, 5)
 	Make.padding(stats, 12, 8)
 	Make.list(stats, 2)
-	cashLabel = Make.text({
-		Text = "$0",
-		TextSize = 28,
-		Font = Theme.fontBlack,
+	cashLabel = Make.display({
+		Text = "💰 $0",
+		TextSize = 30,
 		TextColor3 = Theme.green,
-		Size = UDim2.new(1, 0, 0, 32),
+		Size = UDim2.new(1, 0, 0, 34),
 		Parent = stats,
 	})
 	incomeLabel = Make.text({
@@ -67,11 +67,11 @@ function HUDController:KnitInit()
 		Size = UDim2.new(1, 0, 0, 16),
 		Parent = stats,
 	})
-	speedLabel = Make.text({
+	speedLabel = Make.display({
 		Text = "⚡ 0 speed",
-		TextSize = 20,
+		TextSize = 22,
 		TextColor3 = Theme.accent2,
-		Size = UDim2.new(1, 0, 0, 24),
+		Size = UDim2.new(1, 0, 0, 26),
 		Parent = stats,
 	})
 	walkLabel =
@@ -99,19 +99,18 @@ function HUDController:KnitInit()
 		Parent = gui,
 	})
 	Make.list(centre, 4, Enum.FillDirection.Vertical, Enum.HorizontalAlignment.Center)
-	bossLabel = Make.text({
+	bossLabel = Make.display({
 		Text = "",
-		TextSize = 26,
-		Font = Theme.fontBlack,
+		TextSize = 30,
 		TextColor3 = Theme.red,
 		TextXAlignment = Enum.TextXAlignment.Center,
 		TextStrokeTransparency = 0.4,
 		Size = UDim2.new(1, 0, 0, 34),
 		Parent = centre,
 	})
-	carryLabel = Make.text({
+	carryLabel = Make.display({
 		Text = "",
-		TextSize = 18,
+		TextSize = 20,
 		TextColor3 = Theme.gold,
 		TextXAlignment = Enum.TextXAlignment.Center,
 		TextStrokeTransparency = 0.5,
@@ -130,7 +129,8 @@ function HUDController:KnitInit()
 		Parent = gui,
 	})
 	Make.corner(basePanel)
-	Make.stroke(basePanel, Theme.accent2, 2, 0.5)
+	Make.outline(basePanel)
+	Make.shadow(basePanel, 5)
 	Make.padding(basePanel, 12, 8)
 	Make.list(basePanel, 6)
 	lockLabel = Make.text({ Text = "Base: --", TextSize = 16, Size = UDim2.new(1, 0, 0, 20), Parent = basePanel })
@@ -149,12 +149,11 @@ end
 function HUDController:AddRailButton(text: string, color: Color3?, onClick: () -> ()): TextButton
 	local btn = Make.button({
 		Text = text,
-		Size = UDim2.new(1, 0, 0, 40),
-		TextSize = 17,
+		Size = UDim2.new(1, 0, 0, 44),
+		TextSize = 19,
 		BackgroundColor3 = color or Theme.panel3,
 		Parent = rail,
 	}, onClick)
-	Make.stroke(btn, Theme.stroke, 1, 0.85)
 	return btn
 end
 
@@ -168,7 +167,7 @@ function HUDController:KnitStart()
 	local SpeedService = Knit.GetService("SpeedService")
 
 	DataController.CashChanged:Connect(function(cash: number)
-		cashLabel.Text = Format.cash(cash)
+		cashLabel.Text = "💰 " .. Format.cash(cash)
 	end)
 	DataController.SpeedChanged:Connect(function(speed: number)
 		speedLabel.Text = `⚡ {Format.short(speed)} speed`
