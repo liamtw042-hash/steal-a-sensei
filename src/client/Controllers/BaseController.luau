@@ -72,6 +72,14 @@ function BaseController:_gateLoop()
 					gate.CanCollide = block
 				end
 			end
+			-- you can never steal from your own base, so hide those prompts locally
+			if folder:GetAttribute("OwnerUserId") == localPlayer.UserId then
+				for _, d in folder:GetDescendants() do
+					if d:IsA("ProximityPrompt") and d.Name == "StealPrompt" and d.Enabled then
+						d.Enabled = false
+					end
+				end
+			end
 		end
 		task.wait(0.25)
 	end
@@ -216,31 +224,28 @@ function BaseController:Refresh()
 			Parent = row,
 		})
 		local id = f.id
-		Make.button(
-			{
-				Text = "Place",
-				Size = UDim2.fromOffset(100, 30),
-				BackgroundColor3 = Theme.green,
-				TextColor3 = Theme.bg,
-				Parent = row,
-			},
-			function()
-				-- first free usable slot
-				local target: number? = nil
-				for _, i in usable do
-					if not bySlot[i] and not data.hatching[tostring(i)] then
-						target = i
-						break
-					end
+		Make.button({
+			Text = "Place",
+			Size = UDim2.fromOffset(100, 30),
+			BackgroundColor3 = Theme.green,
+			TextColor3 = Theme.bg,
+			Parent = row,
+		}, function()
+			-- first free usable slot
+			local target: number? = nil
+			for _, i in usable do
+				if not bySlot[i] and not data.hatching[tostring(i)] then
+					target = i
+					break
 				end
-				if not target then
-					Toast.show("No free slot", "warn")
-					return
-				end
-				local ok, msg = FighterService:PlaceFighter(id, target)
-				Toast.show(msg, if ok then "success" else "warn")
 			end
-		)
+			if not target then
+				Toast.show("No free slot", "warn")
+				return
+			end
+			local ok, msg = FighterService:PlaceFighter(id, target)
+			Toast.show(msg, if ok then "success" else "warn")
+		end)
 	end
 	for name, n in counts do
 		if n >= Config.Fighters.Fuse.required then
@@ -272,19 +277,16 @@ function BaseController:Refresh()
 			Parent = row,
 		})
 		local idx = i
-		Make.button(
-			{
-				Text = "Hatch",
-				Size = UDim2.fromOffset(100, 30),
-				BackgroundColor3 = Theme.green,
-				TextColor3 = Theme.bg,
-				Parent = row,
-			},
-			function()
-				local ok, msg = FighterService:PlaceScrollFromBag(idx, nil)
-				Toast.show(msg, if ok then "success" else "warn")
-			end
-		)
+		Make.button({
+			Text = "Hatch",
+			Size = UDim2.fromOffset(100, 30),
+			BackgroundColor3 = Theme.green,
+			TextColor3 = Theme.bg,
+			Parent = row,
+		}, function()
+			local ok, msg = FighterService:PlaceScrollFromBag(idx, nil)
+			Toast.show(msg, if ok then "success" else "warn")
+		end)
 	end
 	if not anyInv then
 		Make.text({
@@ -309,19 +311,16 @@ function BaseController:Refresh()
 		Parent = tCard,
 	})
 	if data.treadmillLevel < T.maxLevel then
-		Make.button(
-			{
-				Text = `Upgrade for {Format.cash(T.upgradeCost(data.treadmillLevel))}`,
-				Size = UDim2.fromOffset(240, 34),
-				BackgroundColor3 = Theme.accent2,
-				TextColor3 = Theme.bg,
-				Parent = tCard,
-			},
-			function()
-				local ok, msg = SpeedService:UpgradeTreadmill()
-				Toast.show(msg, if ok then "success" else "warn")
-			end
-		)
+		Make.button({
+			Text = `Upgrade for {Format.cash(T.upgradeCost(data.treadmillLevel))}`,
+			Size = UDim2.fromOffset(240, 34),
+			BackgroundColor3 = Theme.accent2,
+			TextColor3 = Theme.bg,
+			Parent = tCard,
+		}, function()
+			local ok, msg = SpeedService:UpgradeTreadmill()
+			Toast.show(msg, if ok then "success" else "warn")
+		end)
 	end
 	local aCard = Make.card({ Parent = upgradesFrame })
 	local A = Config.Base.AlarmTrap
@@ -335,19 +334,16 @@ function BaseController:Refresh()
 	if data.alarmTrap then
 		Make.text({ Text = "✅ Installed", TextColor3 = Theme.green, Parent = aCard })
 	else
-		Make.button(
-			{
-				Text = `Install for {Format.cash(A.cost)}`,
-				Size = UDim2.fromOffset(240, 34),
-				BackgroundColor3 = Theme.accent2,
-				TextColor3 = Theme.bg,
-				Parent = aCard,
-			},
-			function()
-				local ok, msg = BaseService:BuyAlarmTrap()
-				Toast.show(msg, if ok then "success" else "warn")
-			end
-		)
+		Make.button({
+			Text = `Install for {Format.cash(A.cost)}`,
+			Size = UDim2.fromOffset(240, 34),
+			BackgroundColor3 = Theme.accent2,
+			TextColor3 = Theme.bg,
+			Parent = aCard,
+		}, function()
+			local ok, msg = BaseService:BuyAlarmTrap()
+			Toast.show(msg, if ok then "success" else "warn")
+		end)
 	end
 	local lCard = Make.card({ Parent = upgradesFrame })
 	Make.text({ Text = "🔒 Lock", TextSize = 18, Parent = lCard })

@@ -175,19 +175,16 @@ function ShopController:Refresh()
 			Parent = row,
 		})
 		local key = item.key
-		Make.button(
-			{
-				Text = `✦ {item.cost}`,
-				Size = UDim2.fromOffset(120, 32),
-				BackgroundColor3 = if data.tokens >= item.cost then Theme.gold else Theme.panel3,
-				TextColor3 = Theme.bg,
-				Parent = row,
-			},
-			function()
-				local ok, msg = EventService:BuyTokenItem(key)
-				Toast.show(msg, if ok then "success" else "warn")
-			end
-		)
+		Make.button({
+			Text = `✦ {item.cost}`,
+			Size = UDim2.fromOffset(120, 32),
+			BackgroundColor3 = if data.tokens >= item.cost then Theme.gold else Theme.panel3,
+			TextColor3 = Theme.bg,
+			Parent = row,
+		}, function()
+			local ok, msg = EventService:BuyTokenItem(key)
+			Toast.show(msg, if ok then "success" else "warn")
+		end)
 	end
 end
 

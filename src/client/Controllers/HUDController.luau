@@ -134,19 +134,16 @@ function HUDController:KnitInit()
 	Make.padding(basePanel, 12, 8)
 	Make.list(basePanel, 6)
 	lockLabel = Make.text({ Text = "Base: --", TextSize = 16, Size = UDim2.new(1, 0, 0, 20), Parent = basePanel })
-	lockButton = Make.button(
-		{
-			Text = "🔒 Lock Base",
-			Size = UDim2.new(1, 0, 0, 32),
-			BackgroundColor3 = Theme.gold,
-			TextColor3 = Theme.bg,
-			Parent = basePanel,
-		},
-		function()
-			local ok, msg = Knit.GetService("BaseService"):LockBase()
-			Toast.show(msg, if ok then "lock" else "warn")
-		end
-	)
+	lockButton = Make.button({
+		Text = "🔒 Lock Base",
+		Size = UDim2.new(1, 0, 0, 32),
+		BackgroundColor3 = Theme.gold,
+		TextColor3 = Theme.bg,
+		Parent = basePanel,
+	}, function()
+		local ok, msg = Knit.GetService("BaseService"):LockBase()
+		Toast.show(msg, if ok then "lock" else "warn")
+	end)
 end
 
 function HUDController:AddRailButton(text: string, color: Color3?, onClick: () -> ()): TextButton
