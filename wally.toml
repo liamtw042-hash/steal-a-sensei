@@ -1,0 +1,14 @@
+[package]
+name = "liamtw042-hash/steal-a-sensei"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+Knit = "sleitnick/knit@1.7.0"
+Promise = "evaera/promise@4.0.0"
+Signal = "sleitnick/signal@2.0.3"
+Trove = "sleitnick/trove@1.8.0"
+
+[server-dependencies]
+ProfileService = "tazmondo/profileservice@1.0.6"

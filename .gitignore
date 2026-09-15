@@ -1,0 +1,16 @@
+# Wally-managed packages (run `wally install`)
+/Packages
+/ServerPackages
+
+# Rojo / tooling output
+/sourcemap.json
+/build/
+*.rbxl
+*.rbxlx
+*.rbxl.lock
+*.rbxlx.lock
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*.log
