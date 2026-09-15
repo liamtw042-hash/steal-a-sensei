@@ -91,6 +91,7 @@ function Make.shadow(frame: GuiObject, offset: number?): Frame
 		Position = frame.Position + UDim2.fromOffset(0, o),
 		AnchorPoint = frame.AnchorPoint,
 		ZIndex = math.max(1, frame.ZIndex - 1),
+		Visible = frame.Visible,
 		Parent = frame.Parent,
 	}) :: Frame
 	Make.corner(sh, Theme.corner)

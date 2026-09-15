@@ -38,12 +38,16 @@ local currentBoss: string? = nil
 
 function HUDController:KnitInit()
 	gui = Make.screen("HUD", 1)
+	-- the default player list would sit under our base panel; cash/rebirths are on the HUD already
+	pcall(function()
+		game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
+	end)
 
 	-- Top-left stats
 	local stats = Make.frame({
 		Name = "Stats",
-		Size = UDim2.fromOffset(250, 118),
-		Position = UDim2.fromOffset(16, 16),
+		Size = UDim2.fromOffset(250, 134),
+		Position = UDim2.fromOffset(16, 76), -- below Roblox's topbar
 		BackgroundColor3 = Theme.panel,
 		BackgroundTransparency = 0.15,
 		Parent = gui,
@@ -83,7 +87,7 @@ function HUDController:KnitInit()
 	rail = Make.frame({
 		Name = "Rail",
 		Size = UDim2.fromOffset(120, 400),
-		Position = UDim2.fromOffset(16, 150),
+		Position = UDim2.fromOffset(16, 224),
 		BackgroundTransparency = 1,
 		Parent = gui,
 	})
@@ -93,7 +97,7 @@ function HUDController:KnitInit()
 	local centre = Make.frame({
 		Name = "Centre",
 		Size = UDim2.fromOffset(520, 90),
-		Position = UDim2.new(0.5, 0, 0, 12),
+		Position = UDim2.new(0.5, 0, 0, 60),
 		AnchorPoint = Vector2.new(0.5, 0),
 		BackgroundTransparency = 1,
 		Parent = gui,
@@ -122,7 +126,7 @@ function HUDController:KnitInit()
 	local basePanel = Make.frame({
 		Name = "BasePanel",
 		Size = UDim2.fromOffset(230, 84),
-		Position = UDim2.new(1, -16, 0, 16),
+		Position = UDim2.new(1, -16, 0, 76),
 		AnchorPoint = Vector2.new(1, 0),
 		BackgroundColor3 = Theme.panel,
 		BackgroundTransparency = 0.15,

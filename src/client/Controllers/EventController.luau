@@ -31,7 +31,7 @@ function EventController:KnitInit()
 	local gui = Make.screen("Events", 4)
 	banner = Make.frame({
 		Size = UDim2.fromOffset(420, 58),
-		Position = UDim2.new(0.5, 0, 0, 100),
+		Position = UDim2.new(0.5, 0, 0, 130),
 		AnchorPoint = Vector2.new(0.5, 0),
 		BackgroundColor3 = Theme.panel,
 		BackgroundTransparency = 0.1,
@@ -62,7 +62,7 @@ function EventController:KnitInit()
 
 	riftFrame = Make.frame({
 		Size = UDim2.fromOffset(420, 30),
-		Position = UDim2.new(0.5, 0, 0, 164),
+		Position = UDim2.new(0.5, 0, 0, 194),
 		AnchorPoint = Vector2.new(0.5, 0),
 		BackgroundColor3 = Theme.panel,
 		Visible = false,

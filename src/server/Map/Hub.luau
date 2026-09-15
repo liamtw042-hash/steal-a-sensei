@@ -19,7 +19,7 @@ local function prompt(part: BasePart, action: string, text: string, object: stri
 	p.ActionText = text
 	p.ObjectText = object
 	p.HoldDuration = 0
-	p.MaxActivationDistance = 10
+	p.MaxActivationDistance = 16
 	p.RequiresLineOfSight = false
 	p.Parent = part
 	part:SetAttribute("HubAction", action)

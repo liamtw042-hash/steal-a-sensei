@@ -83,7 +83,7 @@ local function treadmill(cf: CFrame, parent: Instance): Part
 		m
 	)
 	Build.light(screen, Color3.fromRGB(80, 220, 255), 8, 1)
-	Build.label(screen, "TREADMILL", Color3.fromRGB(80, 220, 255), 2, 150)
+	Build.label(screen, "TREADMILL", Color3.fromRGB(80, 220, 255), 2, 110, 45)
 	return base
 end
 
@@ -124,7 +124,7 @@ local function lockPad(cf: CFrame, parent: Instance): Part
 		Size = NumberSequence.new(0.4),
 		Speed = NumberRange.new(2, 3),
 	})
-	Build.label(core, "🔒 LOCK", Color3.fromRGB(255, 220, 90), 3.5, 140)
+	Build.label(core, "🔒 LOCK", Color3.fromRGB(255, 220, 90), 3.5, 90, 45)
 	return ring
 end
 
@@ -217,7 +217,7 @@ function Bases.build(parent: Folder, index: number)
 		)
 		Build.light(lamp, Color3.fromRGB(255, 240, 200), 12, 1)
 	end
-	for i, y in { 1.5, 4, 6.5, 9 } do
+	for i, y in { 1.2, 3.2, 5.2, 7.2, 9.2 } do
 		local a0 = Instance.new("Attachment")
 		a0.Position = Vector3.new(0.75, y - 5.5, 0)
 		a0.Parent = postL
@@ -229,8 +229,8 @@ function Bases.build(parent: Folder, index: number)
 		beam.Attachment0 = a0
 		beam.Attachment1 = a1
 		beam.Color = ColorSequence.new(Color3.fromRGB(255, 40, 40))
-		beam.Width0 = 0.35
-		beam.Width1 = 0.35
+		beam.Width0 = 0.6
+		beam.Width1 = 0.6
 		beam.LightEmission = 1
 		beam.LightInfluence = 0
 		beam.Transparency = NumberSequence.new(0.1)
