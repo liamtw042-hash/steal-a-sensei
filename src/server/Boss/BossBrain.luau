@@ -65,6 +65,7 @@ type Fields = {
 	spawnClone: (brain: any, lifetime: number, speedMult: number) -> (),
 	effect: (kind: string, position: Vector3) -> (),
 	baseSpeed: number,
+	animator: NpcRig.NpcAnimator,
 }
 
 export type BossBrain = typeof(setmetatable({} :: Fields, BossBrain))
@@ -123,6 +124,7 @@ function BossBrain.new(
 		spawnClone = callbacks.spawnClone,
 		effect = callbacks.effect,
 		baseSpeed = speed,
+		animator = NpcRig.animate(model),
 	}
 	local self: BossBrain = setmetatable(fields, BossBrain)
 
@@ -242,6 +244,7 @@ function BossBrain.Destroy(self: BossBrain)
 		return
 	end
 	self.alive = false
+	self.animator.Destroy()
 	self.callbacks.onStateChanged(self, "Return", nil)
 	self.model:Destroy()
 end

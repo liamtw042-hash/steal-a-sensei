@@ -41,9 +41,9 @@ function LightingBuilder.build()
 	atmo.Parent = Lighting
 
 	local bloom = Instance.new("BloomEffect")
-	bloom.Intensity = 0.6
-	bloom.Size = 32
-	bloom.Threshold = 1.1
+	bloom.Intensity = 0.35
+	bloom.Size = 24
+	bloom.Threshold = 1.7
 	bloom.Parent = Lighting
 
 	local rays = Instance.new("SunRaysEffect")

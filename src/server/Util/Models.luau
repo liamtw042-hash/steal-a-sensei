@@ -12,6 +12,7 @@ local Rarity = require(ReplicatedStorage.Shared.Util.Rarity)
 local Format = require(ReplicatedStorage.Shared.Util.Format)
 local Economy = require(ReplicatedStorage.Shared.Util.Economy)
 local CharacterUtil = require(script.Parent.CharacterUtil)
+local Build = require(script.Parent.Parent.Map.Build)
 
 local Models = {}
 
@@ -58,40 +59,99 @@ function Models.billboard(parent: BasePart, text: string, color: Color3, offsetY
 end
 
 function Models.scroll(rarity: string): Model
+	local color = Rarity.color(rarity)
 	local folder = ReplicatedStorage:FindFirstChild("Scrolls")
 	local tmpl = if folder then folder:FindFirstChild(rarity) else nil
 	local model: Model
 	if tmpl and tmpl:IsA("Model") and tmpl.PrimaryPart then
 		model = tmpl:Clone()
 	else
+		-- an unrolled hanging scroll: cream paper, rarity-coloured rollers top and bottom, ink marks, ribbon
 		model = Instance.new("Model")
-		local handle = Instance.new("Part")
-		handle.Name = "Handle"
-		handle.Shape = Enum.PartType.Cylinder
-		handle.Size = Vector3.new(3, 1, 1)
-		handle.Color = Rarity.color(rarity)
-		handle.Material = Enum.Material.Neon
-		handle.CFrame = CFrame.Angles(0, 0, math.rad(90))
-		handle.Parent = model
-		local band = Instance.new("Part")
-		band.Name = "Band"
-		band.Size = Vector3.new(1.2, 0.4, 1.2)
-		band.Color = Color3.fromRGB(230, 220, 200)
-		band.Material = Enum.Material.SmoothPlastic
-		band.CFrame = handle.CFrame
-		band.Parent = model
-		local weld = Instance.new("WeldConstraint")
-		weld.Part0 = handle
-		weld.Part1 = band
-		weld.Parent = handle
-		model.PrimaryPart = handle
+		local paper = Instance.new("Part")
+		paper.Name = "Handle"
+		paper.Size = Vector3.new(2.4, 3.2, 0.18)
+		paper.Color = Color3.fromRGB(245, 235, 210)
+		paper.Material = Enum.Material.SmoothPlastic
+		paper.Parent = model
+		for _, y in { 1.7, -1.7 } do
+			local roller = Instance.new("Part")
+			roller.Name = "Roller"
+			roller.Shape = Enum.PartType.Cylinder
+			roller.Size = Vector3.new(3.2, 0.7, 0.7)
+			roller.Color = color
+			roller.Material = Enum.Material.Neon
+			roller.CFrame = paper.CFrame * CFrame.new(0, y, 0)
+			roller.Parent = model
+			for _, x in { -1.7, 1.7 } do
+				local cap = Instance.new("Part")
+				cap.Name = "Cap"
+				cap.Shape = Enum.PartType.Ball
+				cap.Size = Vector3.new(0.85, 0.85, 0.85)
+				cap.Color = Color3.fromRGB(255, 215, 120)
+				cap.Material = Enum.Material.Metal
+				cap.CFrame = paper.CFrame * CFrame.new(x, y, 0)
+				cap.Parent = model
+			end
+		end
+		-- ink "kanji" strokes
+		for i = 0, 2 do
+			local ink = Instance.new("Part")
+			ink.Name = "Ink"
+			ink.Size = Vector3.new(0.9 - i * 0.15, 0.22, 0.05)
+			ink.Color = Color3.fromRGB(35, 30, 40)
+			ink.Material = Enum.Material.SmoothPlastic
+			ink.CFrame = paper.CFrame * CFrame.new((i % 2) * 0.3 - 0.15, 0.7 - i * 0.6, 0.12)
+			ink.Parent = model
+		end
+		local ribbon = Instance.new("Part")
+		ribbon.Name = "Ribbon"
+		ribbon.Size = Vector3.new(0.3, 3.4, 0.05)
+		ribbon.Color = color
+		ribbon.Material = Enum.Material.Fabric
+		ribbon.CFrame = paper.CFrame * CFrame.new(-0.9, 0, 0.12)
+		ribbon.Parent = model
+		model.PrimaryPart = paper
 	end
 	model.Name = "Scroll"
 	model:SetAttribute("Rarity", rarity)
 	prepareParts(model, true)
 	local pp = model.PrimaryPart :: BasePart
-	Models.billboard(pp, `{rarity} Scroll`, Rarity.color(rarity), 2.2, UDim2.fromOffset(130, 30))
+	-- only the primary part stays anchored; the rest are welded so the whole scroll can bob
+	for _, d in model:GetDescendants() do
+		if d:IsA("BasePart") and d ~= pp then
+			d.Anchored = false
+			local w = Instance.new("WeldConstraint")
+			w.Part0 = pp
+			w.Part1 = d
+			w.Parent = d
+		end
+	end
+	local light = Instance.new("PointLight")
+	light.Color = color
+	light.Range = 9
+	light.Brightness = 1.2
+	light.Parent = pp
+	local e = Instance.new("ParticleEmitter")
+	e.Texture = "rbxasset://textures/particles/sparkles_main.dds"
+	e.Color = ColorSequence.new(color)
+	e.Rate = 6 + Rarity.index(rarity) * 2
+	e.Lifetime = NumberRange.new(0.8, 1.6)
+	e.Speed = NumberRange.new(1, 2.5)
+	e.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.6), NumberSequenceKeypoint.new(1, 0) })
+	e.LightEmission = 1
+	e.SpreadAngle = Vector2.new(180, 180)
+	e.Parent = pp
+	Models.billboard(pp, `{rarity} Scroll`, color, 2.6, UDim2.fromOffset(130, 30))
 	return model
+end
+
+-- Bob + slowly spin a placed scroll (call after it is positioned and parented)
+function Models.floatScroll(model: Model)
+	local pp = model.PrimaryPart
+	if pp then
+		Build.hover(pp, 0.6, 2.2, true)
+	end
 end
 
 function Models.fighterCps(fighter: Types.Fighter): number

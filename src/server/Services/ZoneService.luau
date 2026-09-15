@@ -184,6 +184,7 @@ function ZoneService:_registerScroll(zone: ZoneRecord, record: ScrollRecord)
 		self:_tryPickup(player, zone, record)
 	end)
 	record.model.Parent = scrollsFolder
+	Models.floatScroll(record.model)
 end
 
 function ZoneService:_spawnNestScroll(zone: ZoneRecord, nest: BasePart)

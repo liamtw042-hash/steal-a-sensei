@@ -790,7 +790,7 @@ function Zones.build(parent: Folder, def: ZonesConfig.ZoneDef, index: number)
 		CanCollide = false,
 		CanQuery = false,
 	}, deco)
-	Build.label(signPart, `{def.id}. {def.name}`, Color3.new(1, 1, 1), 0, 340, 260)
+	Build.label(signPart, `{def.id}. {def.name}`, Color3.new(1, 1, 1), 0, 340, 150)
 
 	-- Boss spawn: a dark stone circle with a glowing rune
 	local bossPos = center + Vector3.new(0, 0, HALF - 10)

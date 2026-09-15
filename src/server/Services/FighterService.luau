@@ -230,6 +230,7 @@ function FighterService:_renderSlot(player: Player, base: any, slot: number)
 		local pp = model.PrimaryPart :: BasePart
 		Models.billboard(pp, `{hatching.rarity} Scroll\nhatching...`, Rarity.color(hatching.rarity), 2.4)
 		model.Parent = base.folder
+		Models.floatScroll(model)
 		models[slot] = model
 		return
 	end

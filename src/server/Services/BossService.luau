@@ -12,6 +12,7 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local Config = require(ReplicatedStorage.Shared.Config)
 local CharacterUtil = require(script.Parent.Parent.Util.CharacterUtil)
 local BossBrain = require(script.Parent.Parent.Boss.BossBrain)
+local BossLooks = require(script.Parent.Parent.Boss.BossLooks)
 
 local BossService = Knit.CreateService({
 	Name = "BossService",
@@ -136,6 +137,9 @@ function BossService:_chasers(player: Player): { [BossBrain.BossBrain]: boolean 
 end
 
 function BossService:_onStateChanged(brain: BossBrain.BossBrain, state: string, target: Player?)
+	if brain.model.Parent then
+		BossLooks.setChasing(brain.model, state == "Chase")
+	end
 	-- maintain reverse index and tell carriers who's after them
 	for player, set in chasedBy do
 		if set[brain] and (state ~= "Chase" or target ~= player) then
@@ -216,6 +220,7 @@ function BossService:_onCatch(brain: BossBrain.BossBrain, player: Player)
 		return
 	end
 
+	brain.animator.PlayAttack()
 	local pos = CharacterUtil.position(player)
 	CarryService:Drop(player, pos, "caught")
 	if data then
