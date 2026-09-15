@@ -612,6 +612,7 @@ function BaseService.Client:GetBaseInfo(player: Player): Types.BaseInfo?
 		friends = if data then data.friends else {},
 		unlockedSlots = if data then self.Server:GetUnlockedSlotCount(data) else 0,
 		unlockedFloor = if data then self.Server:GetUnlockedFloor(data) else 1,
+		usableSlots = if data then self.Server:GetUsableSlotIndices(base, data) else {},
 	}
 end
 

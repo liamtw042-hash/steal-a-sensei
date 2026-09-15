@@ -195,7 +195,7 @@ function DataService:SetCash(player: Player, amount: number)
 	if not data then
 		return
 	end
-	data.cash = math.max(0, math.floor(amount))
+	data.cash = math.max(0, amount)
 	self.Client.Cash:SetFor(player, data.cash)
 	local ls = player:FindFirstChild("leaderstats")
 	local v = if ls then ls:FindFirstChild("Cash") else nil

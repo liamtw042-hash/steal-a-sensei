@@ -10,6 +10,7 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local Types = require(ReplicatedStorage.Shared.Types)
 local Rarity = require(ReplicatedStorage.Shared.Util.Rarity)
 local Format = require(ReplicatedStorage.Shared.Util.Format)
+local Economy = require(ReplicatedStorage.Shared.Util.Economy)
 local CharacterUtil = require(script.Parent.CharacterUtil)
 
 local Models = {}
@@ -93,14 +94,8 @@ function Models.scroll(rarity: string): Model
 	return model
 end
 
--- Cash per second for a fighter instance (level + mutation applied, no player multipliers)
 function Models.fighterCps(fighter: Types.Fighter): number
-	local def = Config.Fighters.get(fighter.name)
-	local base = if def then def.cashPerSecond else Rarity.baseCps(fighter.rarity)
-	local levelMult = 1 + Config.Fighters.Levelling.cashBonusPerLevel * (fighter.level - 1)
-	local mut = Config.Fighters.mutation(fighter.mutation)
-	local mutMult = if mut then mut.multiplier else 1
-	return base * levelMult * mutMult
+	return Economy.fighterCps(fighter)
 end
 
 function Models.fighterLabelText(fighter: Types.Fighter, extra: string?): string

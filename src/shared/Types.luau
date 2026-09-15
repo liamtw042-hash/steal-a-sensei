@@ -65,6 +65,7 @@ export type BaseInfo = {
 	friends: { [string]: boolean },
 	unlockedSlots: number,
 	unlockedFloor: number,
+	usableSlots: { number }, -- slot indices the owner may use right now (floor-gated)
 }
 
 return {}
