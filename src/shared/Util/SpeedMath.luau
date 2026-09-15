@@ -33,7 +33,7 @@ function SpeedMath.gamepassMultiplier(ownedPasses: { [string]: boolean }): numbe
 			mult *= p.multiplier
 		end
 	end
-	return mult
+	return math.min(mult, Config.Speed.MaxMultiplier)
 end
 
 function SpeedMath.effectiveSpeed(rawStat: number, ownedPasses: { [string]: boolean }): number

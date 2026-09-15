@@ -133,6 +133,10 @@ function RebirthController:Refresh()
 	end)
 end
 
+function RebirthController:Open()
+	window.setOpen(true)
+end
+
 function RebirthController:KnitStart()
 	window = Window.new("Rebirth", "🌸 Rebirth", UDim2.fromOffset(600, 520))
 	body = Make.scroll({ Parent = window.content }, 8)

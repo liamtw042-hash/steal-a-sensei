@@ -36,25 +36,26 @@ local RarityColor: { [string]: Color3 } = {
 }
 
 -- Base cash per second per rarity (scales hard). Individual fighters override with their own cps.
+-- Tuned so a free player hits rebirth 1 in ~1h, 5 in ~1 day, 10 in ~1 week. See docs/ECONOMY.md.
 local RarityCashPerSecond: { [string]: number } = {
-	Common = 3,
-	Uncommon = 15,
-	Rare = 100,
-	Epic = 800,
-	Legendary = 8_000,
-	Mythic = 100_000,
+	Common = 25,
+	Uncommon = 120,
+	Rare = 600,
+	Epic = 3_000,
+	Legendary = 40_000,
+	Mythic = 250_000,
 	Secret = 1_500_000,
 }
 
 -- Seconds for a scroll of this rarity to hatch once placed in a base slot.
 local HatchSeconds: { [string]: number } = {
 	Common = 20,
-	Uncommon = 45,
-	Rare = 90,
-	Epic = 180,
-	Legendary = 360,
-	Mythic = 600,
-	Secret = 900,
+	Uncommon = 40,
+	Rare = 75,
+	Epic = 150,
+	Legendary = 300,
+	Mythic = 480,
+	Secret = 720,
 }
 
 -- Mutations rolled on hatch. Chances are independent percentages checked from rarest to most common.
@@ -67,7 +68,7 @@ local Mutations: { MutationDef } = {
 
 local Levelling = {
 	maxLevel = 10,
-	xpPerMinutePlaced = 10,
+	xpPerMinutePlaced = 20, -- level 10 (evolution) after ~2 hours placed
 	cashBonusPerLevel = 0.10, -- +10% per level above 1
 	-- XP needed to go from level L to L+1
 	xpToNext = function(level: number): number
@@ -82,29 +83,29 @@ local Fuse = {
 -- Minimum roster: two per rarity. Add more freely.
 local Roster: { FighterDef } = {
 	-- Common (zone 1)
-	{ name = "Dojo Novice", displayName = "Dojo Novice", rarity = "Common", zoneId = 1, cashPerSecond = 3 },
-	{ name = "Straw Hat Kid", displayName = "Straw Hat Kid", rarity = "Common", zoneId = 1, cashPerSecond = 4 },
+	{ name = "Dojo Novice", displayName = "Dojo Novice", rarity = "Common", zoneId = 1, cashPerSecond = 25 },
+	{ name = "Straw Hat Kid", displayName = "Straw Hat Kid", rarity = "Common", zoneId = 1, cashPerSecond = 30 },
 	-- Uncommon (zones 2 / 3)
-	{ name = "Bamboo Striker", displayName = "Bamboo Striker", rarity = "Uncommon", zoneId = 2, cashPerSecond = 15 },
-	{ name = "Shadow Scout", displayName = "Shadow Scout", rarity = "Uncommon", zoneId = 3, cashPerSecond = 18 },
+	{ name = "Bamboo Striker", displayName = "Bamboo Striker", rarity = "Uncommon", zoneId = 2, cashPerSecond = 120 },
+	{ name = "Shadow Scout", displayName = "Shadow Scout", rarity = "Uncommon", zoneId = 3, cashPerSecond = 140 },
 	-- Rare (zones 4 / 5)
-	{ name = "Storm Caller", displayName = "Storm Caller", rarity = "Rare", zoneId = 4, cashPerSecond = 100 },
-	{ name = "Frost Blade", displayName = "Frost Blade", rarity = "Rare", zoneId = 5, cashPerSecond = 120 },
+	{ name = "Storm Caller", displayName = "Storm Caller", rarity = "Rare", zoneId = 4, cashPerSecond = 600 },
+	{ name = "Frost Blade", displayName = "Frost Blade", rarity = "Rare", zoneId = 5, cashPerSecond = 700 },
 	-- Epic (zones 6 / 7)
-	{ name = "Ember Fist", displayName = "Ember Fist", rarity = "Epic", zoneId = 6, cashPerSecond = 800 },
-	{ name = "Tide Breaker", displayName = "Tide Breaker", rarity = "Epic", zoneId = 7, cashPerSecond = 950 },
+	{ name = "Ember Fist", displayName = "Ember Fist", rarity = "Epic", zoneId = 6, cashPerSecond = 3_000 },
+	{ name = "Tide Breaker", displayName = "Tide Breaker", rarity = "Epic", zoneId = 7, cashPerSecond = 3_500 },
 	-- Legendary (zones 8 / 9)
-	{ name = "Ruin Colossus", displayName = "Ruin Colossus", rarity = "Legendary", zoneId = 8, cashPerSecond = 8_000 },
+	{ name = "Ruin Colossus", displayName = "Ruin Colossus", rarity = "Legendary", zoneId = 8, cashPerSecond = 40_000 },
 	{
 		name = "Celestial Blade",
 		displayName = "Celestial Blade",
 		rarity = "Legendary",
 		zoneId = 9,
-		cashPerSecond = 9_500,
+		cashPerSecond = 48_000,
 	},
 	-- Mythic (zone 10)
-	{ name = "Sakura Reaper", displayName = "Sakura Reaper", rarity = "Mythic", zoneId = 10, cashPerSecond = 100_000 },
-	{ name = "Void Dancer", displayName = "Void Dancer", rarity = "Mythic", zoneId = 10, cashPerSecond = 125_000 },
+	{ name = "Sakura Reaper", displayName = "Sakura Reaper", rarity = "Mythic", zoneId = 10, cashPerSecond = 250_000 },
+	{ name = "Void Dancer", displayName = "Void Dancer", rarity = "Mythic", zoneId = 10, cashPerSecond = 300_000 },
 	-- Secret (zone 10)
 	{
 		name = "The First Sensei",

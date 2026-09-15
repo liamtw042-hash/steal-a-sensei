@@ -128,8 +128,8 @@ function Window.new(name: string, titleText: string, size: UDim2?): Window
 	return w
 end
 
--- Tab bar inside a window's content. Returns a frame per tab; only one is visible.
-function Window.tabs(content: Frame, names: { string }): { [string]: Frame }
+-- Tab bar inside a window's content. Returns a frame per tab (only one visible) and a selector.
+function Window.tabs(content: Frame, names: { string }): ({ [string]: Frame }, (name: string) -> ())
 	local bar = Make.row({ Name = "Tabs", Size = UDim2.new(1, 0, 0, 36), Parent = content })
 	local pages: { [string]: Frame } = {}
 	local buttons: { [string]: TextButton } = {}
@@ -159,7 +159,7 @@ function Window.tabs(content: Frame, names: { string }): { [string]: Frame }
 		end)
 	end
 	select(names[1])
-	return pages
+	return pages, select
 end
 
 return Window

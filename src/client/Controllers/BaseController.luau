@@ -25,6 +25,7 @@ local BaseController = Knit.CreateController({ Name = "BaseController" })
 local localPlayer = Players.LocalPlayer
 local window: Window.Window
 local pages: { [string]: Frame }
+local selectTab: (name: string) -> () = function() end
 
 local function fighterName(f: Types.Fighter): string
 	local def = Config.Fighters.get(f.name)
@@ -118,7 +119,7 @@ function BaseController:_buildWindow()
 		Position = UDim2.fromOffset(0, 26),
 		Parent = window.content,
 	})
-	pages = Window.tabs(tabHost, { "Slots", "Inventory", "Upgrades", "Friends" })
+	pages, selectTab = Window.tabs(tabHost, { "Slots", "Inventory", "Upgrades", "Friends" })
 
 	slotsScroll = Make.scroll({ Parent = pages.Slots }, 6)
 	inventoryScroll = Make.scroll({ Parent = pages.Inventory }, 6)
@@ -397,6 +398,13 @@ function BaseController:Refresh()
 end
 
 --------------------------------------------------------------------------------
+
+function BaseController:Open(tab: string?)
+	window.setOpen(true)
+	if tab then
+		selectTab(tab)
+	end
+end
 
 function BaseController:KnitStart()
 	self:_buildWindow()

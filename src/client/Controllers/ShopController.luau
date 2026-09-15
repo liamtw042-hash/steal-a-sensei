@@ -82,7 +82,7 @@ function ShopController:Refresh()
 	-- Speed ladder
 	clear(speedScroll)
 	Make.text({
-		Text = `Your multiplier: <b>x{Format.short(SpeedMath.gamepassMultiplier(data.gamepasses))}</b>. Each pass stacks multiplicatively.`,
+		Text = `Your multiplier: <b>x{Format.short(SpeedMath.gamepassMultiplier(data.gamepasses))}</b>. Each pass stacks multiplicatively, <b>capped at x{Config.Speed.MaxMultiplier} total</b>.`,
 		TextColor3 = Theme.muted,
 		Size = UDim2.new(1, 0, 0, 22),
 		Parent = speedScroll,

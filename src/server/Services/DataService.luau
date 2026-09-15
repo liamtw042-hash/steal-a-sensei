@@ -39,6 +39,7 @@ local function template(): PlayerData
 		gamepasses = {},
 		alarmTrap = false,
 		friends = {},
+		tutorialDone = false,
 		stats = { scrollsSecured = 0, fightersStolen = 0, timesCaught = 0, playtime = 0 },
 	}
 end
@@ -255,6 +256,14 @@ end
 
 function DataService.Client:GetData(player: Player): PlayerData?
 	return self.Server:Get(player)
+end
+
+function DataService.Client:CompleteTutorial(player: Player)
+	local data = self.Server:Get(player)
+	if data and not data.tutorialDone then
+		data.tutorialDone = true
+		self.Server:Replicate(player)
+	end
 end
 
 return DataService

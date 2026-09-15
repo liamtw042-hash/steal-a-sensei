@@ -36,15 +36,20 @@ local Speed = {
 	-- Treadmill: stand on Workspace.Bases.BaseN.Treadmill to gain speed every second.
 	Treadmill = {
 		maxLevel = 40,
+		-- see docs/ECONOMY.md for the table these produce
 		ratePerSecond = function(level: number): number
-			return math.floor(2 * (1.6 ^ (level - 1)))
+			return math.floor(25 * (1.55 ^ (level - 1)))
 		end,
 		upgradeCost = function(level: number): number -- cost to go from `level` to `level + 1`
-			return math.floor(500 * (3 ^ (level - 1)))
+			return math.floor(1000 * (1.9 ^ (level - 1)))
 		end,
 	},
 
 	-- Multiplicative speed gamepasses. `key` matches Config.Monetization.Gamepasses.
+	-- The product of every owned pass is CAPPED at MaxMultiplier (1024x). Owning 2x+4x+8x+16x already
+	-- reaches the cap, so the higher passes only matter if you skipped lower ones. Documented in
+	-- docs/DASHBOARD.md; consider making them additive if you want every pass to be worth buying.
+	MaxMultiplier = 1024,
 	MultiplierPasses = {
 		{ key = "Speed2x", multiplier = 2 },
 		{ key = "Speed4x", multiplier = 4 },

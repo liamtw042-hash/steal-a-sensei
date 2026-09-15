@@ -47,6 +47,7 @@ export type PlayerData = {
 	gamepasses: { [string]: boolean },
 	alarmTrap: boolean,
 	friends: { [string]: boolean }, -- tostring(userId)
+	tutorialDone: boolean,
 	stats: { scrollsSecured: number, fightersStolen: number, timesCaught: number, playtime: number },
 }
 

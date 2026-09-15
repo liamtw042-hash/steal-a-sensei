@@ -107,6 +107,10 @@ function IndexController:Refresh()
 	end
 end
 
+function IndexController:Open()
+	window.setOpen(true)
+end
+
 function IndexController:KnitStart()
 	window = Window.new("Index", "📖 Index", UDim2.fromOffset(680, 520))
 	scroll = Make.scroll({ Parent = window.content }, 6)
