@@ -186,8 +186,8 @@ function BaseService:_setupSign(base: BaseRecord)
 	local bb = Instance.new("BillboardGui")
 	bb.Name = "OwnerSign"
 	bb.Size = UDim2.fromOffset(260, 70)
-	bb.AlwaysOnTop = true
-	bb.MaxDistance = 250
+	bb.AlwaysOnTop = false
+	bb.MaxDistance = 120
 	bb.Parent = base.sign
 	local lbl = Instance.new("TextLabel")
 	lbl.Name = "Text"
@@ -214,8 +214,18 @@ function BaseService:_writeAttributes(base: BaseRecord)
 	f:SetAttribute("UnlockedFloor", if data then self:GetUnlockedFloor(data) else 0)
 	f:SetAttribute("AlarmTrap", if data then data.alarmTrap else false)
 	local locked = self:IsLocked(base)
-	for _, gate in base.gates do
-		gate.Transparency = if locked then 0.35 else 0.9
+	local lasers = f:FindFirstChild("Lasers")
+	if lasers then
+		-- real laser beams: enable while locked
+		for _, d in lasers:GetDescendants() do
+			if d:IsA("Beam") then
+				d.Enabled = locked
+			end
+		end
+	else
+		for _, gate in base.gates do
+			gate.Transparency = if locked then 0.35 else 0.9
+		end
 	end
 	local sign = base.sign
 	local bb = if sign then sign:FindFirstChild("OwnerSign") else nil
