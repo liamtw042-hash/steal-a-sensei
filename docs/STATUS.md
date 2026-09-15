@@ -1,71 +1,84 @@
 # Status: what's verified, what needs a playtest, known limits
 
-Last updated 2026-09-15.
+Last updated 2026-09-16 (overnight visuals + functionality pass).
 
 ## Verified
 
 **Static (every commit):** `luau-lsp analyze` in strict mode over all of `src/` with the
 Roblox type definitions, StyLua formatting, `rojo build` to a place file.
 
-**Live in Studio (Rojo connected to the open "Steal a Sensei" baseplate, one player):**
+**Live in Studio (Rojo connected, one player, blank baseplate):**
 
-- Rojo plugin connects and syncs; server + client start with no errors.
-- Dev map auto-generates (zones, bases, spawn) on the blank baseplate.
-- HUD, rail buttons, base panel (tabs, slot list), hotbar all render.
-- Player is assigned Base 1 and spawns inside it; 30s join auto-lock counts down, unlock
-  cooldown shows, Lock button appears when open.
-- Zone boss spawns as a default R15 rig and patrols.
-- Grabbing a scroll from a nest: carry indicator, "BRUTE IS CHASING YOU" warning.
-- Boss chase + catch: caught toast, scroll dropped at the catch point, player launched to spawn.
-- Reaching your own base with a scroll: "secured" toast, hatching scroll rendered in Slot 1,
-  hatched into a fighter after the configured time, hatch toast, fighter model + label
-  rendered, income starts ($4/s), cash rises on the HUD and leaderboard.
+- New generated map builds in ~0.1s with no errors: terrain (leafy-grass floor, per-zone
+  floor materials, cliff corridors, water pools, ice patches, lava mounds), sky/atmosphere/
+  bloom/sun rays/colour grading/clouds, hub plaza (spawn pad, fuse machine, shop stall,
+  rebirth shrine, spinning rift portal, index board), eight fenced base plots, ten dressed zones.
+- Boss costumes render (Brute seen up close: horns, fists, belt); default-rig animation
+  loop plays; chase trail/aura toggles with chase state.
+- Scroll models with rarity particles on glowing pedestals; scrolls bob.
+- HUD (now below Roblox's topbar, which had been hiding the cash line), chunky buttons,
+  windows, toasts, zone prompt, hotbar all render; shop window shows the 1024x cap.
+- Tutorial: step 1 → 2 on grab, → 3 on secure, finishes on the lock pad; saved flag.
+- Full loop with new visuals: grab, "BRUTE IS CHASING YOU", catch (drop + launch), secure,
+  hatch, income at the retuned rate ($25/s for a Common).
+- Lock pad → "Base locked" toast → red laser beams across the gate.
+- Hub shop prompt opens the Shop window.
+- Phone layout (Studio device emulator, iPhone XR): HUD scales to ~0.55, rail/hotbar/tutorial
+  card fit and don't overlap the joystick or jump button.
 
-## Needs a real playtest (written, type-checked, not yet exercised)
+## Needs a real playtest
 
-Most of these need two or more players, real gamepass ids, or a lot of time:
-
-- Zones 2–10 gates and all nine gimmicks (Corners, Teleport, SlowPatch, FireTrail, Pull,
-  Boulder, Clones, OneHit). Only the Brute (no gimmick) was watched.
-- Boss camping an unlocked base entrance vs bouncing off a locked one.
-- Levelling, evolution at level 10, fusing, Index rewards (time-gated; xp is 10/min).
-- Stealing: prompt, thief slow, owner alert + highlight, carrying home, level reset, loose
-  fighter pickup/return, "vanish on rebirth".
-- Laser gates for non-owners, friend whitelist, intruder ejection, alarm trap, guard NPC.
-- Rebirth flow end to end (needs $500K + a Rare).
-- Gamepasses / developer products (all ids are 0 until you create them), receipt handling,
-  speed multiplier stacking, VIP, Growth, +5 Slots, Guard.
-- Combat items (Slap, Trap, Smoke Bomb, Grapple, Body Swap, Shield): server logic exists and
-  hotkeys are wired, but none were fired against another player.
-- Events: Rift (first fires 5 min after server start), Void Surge (8 min), Hungry Sensei
-  (15 min), token shop.
-- Free rewards claim flow (group id is 0 so the group check is skipped).
-- Data persistence across rejoins (Studio had API access disabled, so ProfileService used
-  its mock store).
-- Mobile / touch layout. The UI is fixed-size pixels; it will need scaling for phones.
+- Sounds: wired to every event but Studio audio wasn't audible to the test harness. They
+  are Roblox built-in `rbxasset://sounds/*` files, so they will play; the *choice* of sound
+  per event is a first guess.
+- Camera shake, speed lines (>28 studs/s) and hatch flash: code ran without errors in the
+  live loop; whether the strength feels right needs a human.
+- Carry pose animation: loads Roblox's tool-hold animation; verify it looks right on R15
+  avatars with different bundles.
+- Zones 2–10 gimmicks, boss costumes other than the Brute up close, Sakura Void canopy
+  and petal rate, floating platforms in Celestial Gate.
+- Everything multiplayer: stealing, gate ejection, friends, alarm, guard, combat items,
+  events (Rift, Void Surge, Hungry Sensei), rebirth flow, purchases (ids still 0).
+- The economy curve in `docs/ECONOMY.md` is arithmetic, not playtested.
+- Data persistence across rejoins (Studio API access is off; ProfileService used its mock).
 
 ## Known limits and honest caveats
 
-- **Speed passes stack to ×2^55** if someone owns all ten, exactly as specified. That is
-  likely far too strong; tune `Config/Speed.luau` MultiplierPasses.
-- **Like / favourite rewards can't be verified**: Roblox has no API for it. They are honour
-  system with a 5s "checking" delay. Group join is verified for real.
-- **Boss pathfinding depends on your map**: bosses use PathfindingService with jump enabled.
-  Narrow doors, floating platforms or unwalkable terrain will make them fall back to
-  straight-line MoveTo and possibly get stuck (there is a stuck nudge + return-home timeout).
-- **Gate collision is client-side** (standard Roblox pattern). The server ejects anyone who
-  gets inside a locked base they're not allowed in, so exploiters gain nothing lasting, but
-  they can visually clip a gate.
+- **StreamingEnabled is on** in the baseplate template. Far zones stream in as you approach.
+  All gameplay is server-side so this is safe, but the client's zone prompt and tutorial
+  arrow only appear once the relevant parts have streamed (a few hundred studs).
+- **Speed passes cap at 1024x total.** Owning 2x+4x+8x+16x already hits the cap; the
+  32x–1024x passes only matter if a player skipped lower ones. That's the brief as specified.
+  If you want every pass to be worth buying, make them additive (see `Config/Speed.luau`).
+- **Like / favourite rewards can't be verified** (no Roblox API). Honour system with a 5s delay.
+- **Boss pathfinding depends on your map.** The generated corridors are wide and flat on
+  purpose. Narrow doors, floating platforms or cliffs will strand bosses (there is a stuck
+  nudge + return-home timeout).
+- **Gate collision is client-side** (standard); the server ejects intruders from locked bases.
 - **One scroll or fighter carried at a time.**
-- **Per-rebirth slots before floor 2**: the +1 slot per rebirth only becomes usable if there
-  are extra Floor-1 slot parts (see STUDIO_CHECKLIST.md). The dev map doesn't add any.
-- **No animations, sounds, or real VFX**: effects are neon spheres and screen flashes, ready
-  to be replaced.
-- **Placeholder fighter stats and economy numbers**: everything scales roughly but the curve
-  hasn't been balanced against real play. Rebirth 10 at $1T will take a very long time with
-  the current cps table; adjust `RarityCashPerSecond` and the roster.
-- **Studio command bar note**: during testing the character was teleported with the command
-  bar (Client context). Those commands are not part of the game.
-- Knit's client half is typed as `any` on the client (its package entry point is typed for
-  the server), so client calls to services aren't type-checked beyond what strict Luau can
-  see locally.
+- **Per-rebirth slots before floor 2** only become usable with extra Floor-1 slot parts.
+
+## What still looks placeholder / needs real assets
+
+Be honest with yourself about this list before publishing:
+
+- **Bosses** read as "what they are" (horns, swords, hat, tail, cape) but they are Roblox
+  default R15 bodies with parts welded on. A modeller or Creator Store rigs
+  (`ReplicatedStorage.Bosses.<Name>`) would be a big upgrade; the code swaps them in automatically.
+- **Fighters** are still coloured placeholder blocks with a head. Every fighter needs a real
+  model in `ReplicatedStorage.Fighters.<name>`.
+- **Props are primitives.** Trees are cylinders + spheres, dummies are cylinders, bamboo is
+  cylinders, coral is cylinders, pillars are cylinders. It reads as low-poly tycoon, but
+  Creator Store meshes (trees, rocks, torii, lanterns, crystals) would lift it.
+- **Terrain is flat.** Cliffs are box fills; no sculpted hills, caves or height variation.
+- **Skybox** is Roblox's default blue sky (no custom skybox textures). Sakura Void's "dark
+  sky" is a black slab overhead with neon dots, not a real night sky.
+- **Particles use the two built-in textures** (sparkles, smoke). Petals, embers, snow and
+  bubbles all use those; custom particle textures would help a lot.
+- **Sounds are the built-in Roblox library** (unsheath, spring, click, ghost howl, victory...).
+  They work everywhere but sound generic; pick real SFX and paste ids into `Shared/Sounds.luau`.
+  There is no music.
+- **No custom animations.** Player run/walk/jump are defaults; carry pose is the tool-hold
+  animation; boss attack is the classic sword slash.
+- **UI icons are emoji.** Fine for now; icon images would look more polished.
+- **No 3D text/logo, no loading screen, no thumbnail.**

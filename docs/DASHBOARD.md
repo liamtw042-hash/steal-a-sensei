@@ -27,8 +27,10 @@ Also set your group id in `src/shared/Config/Speed.luau` → `FreeRewards.groupI
 | `Slots5` | +5 Slots | 100 | five permanent extra base slots |
 | `Guard` | Base Guard | 250 | guard NPC patrols your base and slows intruders |
 
-All speed passes stack multiplicatively (owning all ten = ×2^55). That is the design as
-specified; tune prices/multipliers in `Config/Speed.luau` + `Config/Monetization.luau`.
+All speed passes stack multiplicatively but the total is **capped at 1024x**
+(`Config/Speed.luau` → `MaxMultiplier`). Owning 2x+4x+8x+16x already reaches the cap, so
+the 32x–1024x passes only add value for players who skipped lower ones. If you want every
+pass to be worth buying, change the maths in `Shared/Util/SpeedMath.luau` to additive.
 
 ## Developer products (6) — combat shop
 

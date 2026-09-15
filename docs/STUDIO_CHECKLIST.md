@@ -47,6 +47,7 @@ Inside **each** base folder (Folder or Model):
 | `Slots` | Folder of Parts | `Slot1` … `SlotN`. Each Part needs a **number attribute `Floor`** = 1, 2 or 3. Floor 1 needs at least 10, floors 2 and 3 at least 8 each. Add extra Floor-1 slots (e.g. `Slot27`+) if you want rebirth/+5-slot bonuses usable before floor 2 unlocks. |
 | `Sign` | Part | *optional* Invisible part above the gate; gets an owner-name billboard. |
 | `GuardPath` | Folder of Parts | *optional* Waypoints for the Guard gamepass NPC (falls back to the slots). |
+| `Lasers` | Folder of Beams | *optional* Any `Beam`s inside are enabled while the base is locked (real laser look). Without it the `Gates` parts just change transparency. |
 
 The base needs solid walls on every side except the gated entrance, or the lasers are pointless.
 
