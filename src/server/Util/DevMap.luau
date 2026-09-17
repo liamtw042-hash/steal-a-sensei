@@ -48,6 +48,19 @@ function DevMap.ensure()
 	TerrainBuilder.build()
 	LightingBuilder.build()
 
+	-- Terrain collision meshes are rebuilt on a background thread, so a raycast fired in the same
+	-- frame as the fill falls straight through to the baseplate. The bases measure the ground with
+	-- a raycast, so wait until the terrain is actually queryable before placing anything on it.
+	local probe = RaycastParams.new()
+	probe.IgnoreWater = true
+	for _ = 1, 240 do
+		local hit = Workspace:Raycast(Vector3.new(0, 80, -50), Vector3.new(0, -200, 0), probe)
+		if hit and hit.Instance == Workspace.Terrain then
+			break
+		end
+		task.wait()
+	end
+
 	local map = Build.folder("Map", Workspace)
 	Hub.build(map)
 

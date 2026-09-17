@@ -1,6 +1,6 @@
 # Status: what's verified, what needs a playtest, known limits
 
-Last updated 2026-09-17 (Speed replaced by the Power system).
+Last updated 2026-09-17 (bases rebuilt from the ReplicatedStorage.Props dojo kit).
 
 ## Verified
 
@@ -30,6 +30,13 @@ Roblox type definitions, StyLua formatting, `rojo build` to a place file.
   per-punch rate and live total, releasing E stops it, F buys the next bag level ($5K taken,
   level 2 granted, prompt updated to $500K, rate 25 → 1,000 per punch), and the Bamboo Forest
   gate reads “Requires 5K Power (you have 100)”.
+
+- Bases rebuilt from the prop kit: DojoFloorTile floor edge to edge (121 tiles), WallSegment
+  perimeter with a gap at the entrance, BaseGate in the gap with the laser beams strung inside it,
+  LockPad, a DisplayPad per slot, and TrainingPost_L1 swapped in place for the higher tiers
+  (verified live: applying level 3 left exactly one visual and resized the bag anchor to 5.60).
+  A base is ~2,960 parts, so eight bases are ~23,700; the props are shadowless and only the floor
+  tiles collide. If that proves heavy, the wall spacing and the floor tile size are the two knobs.
 
 ## Needs a real playtest
 

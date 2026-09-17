@@ -18,6 +18,7 @@ local Signal = require(ReplicatedStorage.Packages.Signal)
 local Config = require(ReplicatedStorage.Shared.Config)
 local PowerMath = require(ReplicatedStorage.Shared.Util.PowerMath)
 local CharacterUtil = require(script.Parent.Parent.Util.CharacterUtil)
+local TrainingProp = require(script.Parent.Parent.Map.TrainingProp)
 
 type Modifier = { multiplier: number, expiresAt: number? }
 
@@ -254,10 +255,9 @@ function PowerService:_swing(bag: BasePart)
 	end
 	swinging[bag] = true
 	local rest = bag.CFrame
-	-- pivot about the top of the bag (where the chain is) in world space, so it swings rather than spins
-	local height = math.max(bag.Size.X, bag.Size.Y, bag.Size.Z)
-	local pivot = CFrame.new(bag.Position + Vector3.new(0, height / 2, 0))
-	local hit = pivot * CFrame.Angles(math.rad(16), 0, 0) * pivot:Inverse() * rest
+	-- the training props stand on the floor, so rock them about their base rather than their top
+	local pivot = CFrame.new(bag.Position - Vector3.new(0, bag.Size.Y / 2 - 0.2, 0))
+	local hit = pivot * CFrame.Angles(math.rad(7), 0, 0) * pivot:Inverse() * rest
 	local out =
 		TweenService:Create(bag, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { CFrame = hit })
 	out:Play()
@@ -290,6 +290,8 @@ function PowerService:_refreshBagPrompt(base: any)
 	end
 	local Format = require(ReplicatedStorage.Shared.Util.Format)
 	local cost = Config.Power.bagUpgradeCost(data.bagLevel)
+	-- swap TrainingPost_L1 -> WoodenDummy_L2 -> ... in place as the bag levels up
+	TrainingProp.apply(bag, data.bagLevel)
 	prompt.Enabled = true
 	prompt.ObjectText = `Punching Bag (Lv {data.bagLevel})`
 	if cost then
