@@ -132,7 +132,7 @@ handlers.SlowPatch = {
 		p.Touched:Connect(function(hit)
 			local player = CharacterUtil.playerFromPart(hit)
 			if player then
-				brain.services.SpeedService:AddModifier(
+				brain.services.PowerService:AddModifier(
 					player,
 					"icePatch",
 					param(brain, "slowMultiplier", 0.55),
@@ -251,7 +251,7 @@ handlers.Boulder = {
 			for _, p in Players:GetPlayers() do
 				local pos = CharacterUtil.position(p)
 				if pos and (pos - predicted).Magnitude <= blast and not CharacterUtil.isInvulnerable(p) then
-					brain.services.SpeedService:Stun(p, stun)
+					brain.services.PowerService:Stun(p, stun)
 				end
 			end
 			ball:Destroy()

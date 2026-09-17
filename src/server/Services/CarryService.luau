@@ -30,7 +30,7 @@ local CarryService = Knit.CreateService({
 })
 
 local DataService: any
-local SpeedService: any
+local PowerService: any
 local BaseService: any
 local ZoneService: any
 local FighterService: any
@@ -40,7 +40,7 @@ local visuals: { [Player]: Model } = {}
 
 function CarryService:KnitInit()
 	DataService = Knit.GetService("DataService")
-	SpeedService = Knit.GetService("SpeedService")
+	PowerService = Knit.GetService("PowerService")
 	BaseService = Knit.GetService("BaseService")
 	ZoneService = Knit.GetService("ZoneService")
 	FighterService = Knit.GetService("FighterService")
@@ -195,7 +195,7 @@ function CarryService:PickupFighter(player: Player, fighter: Types.Fighter, orig
 	carried[player] = item
 	self:_attachVisual(player, item)
 	self:_setAttributes(player, item)
-	SpeedService:AddModifier(player, "carryFighter", Config.Speed.Modifiers.carryingFighter)
+	PowerService:AddModifier(player, "carryFighter", Config.Power.Modifiers.carryingFighter)
 	self.Client.Changed:Fire(player, self:_clientInfo(item))
 	self.PickedUp:Fire(player, item)
 	return true
@@ -209,7 +209,7 @@ function CarryService:_clear(player: Player): Carried?
 	carried[player] = nil
 	self:_removeVisual(player)
 	self:_setAttributes(player, nil)
-	SpeedService:RemoveModifier(player, "carryFighter")
+	PowerService:RemoveModifier(player, "carryFighter")
 	self.Client.Changed:Fire(player, nil)
 	return item
 end

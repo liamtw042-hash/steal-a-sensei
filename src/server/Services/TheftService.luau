@@ -20,13 +20,13 @@ local TheftService = Knit.CreateService({
 local BaseService: any
 local CarryService: any
 local FighterService: any
-local SpeedService: any
+local PowerService: any
 
 function TheftService:KnitInit()
 	BaseService = Knit.GetService("BaseService")
 	CarryService = Knit.GetService("CarryService")
 	FighterService = Knit.GetService("FighterService")
-	SpeedService = Knit.GetService("SpeedService")
+	PowerService = Knit.GetService("PowerService")
 end
 
 function TheftService:TrySteal(thief: Player, owner: Player, fighterId: string): boolean
@@ -49,7 +49,7 @@ function TheftService:TrySteal(thief: Player, owner: Player, fighterId: string):
 		BaseService:Notify(thief, "You're already carrying something!", "warn")
 		return false
 	end
-	if SpeedService:IsStunned(thief) or not CharacterUtil.isAlive(thief) then
+	if PowerService:IsStunned(thief) or not CharacterUtil.isAlive(thief) then
 		return false
 	end
 	local pos = CharacterUtil.position(thief)

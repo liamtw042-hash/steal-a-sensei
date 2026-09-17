@@ -24,7 +24,7 @@ local CombatService = Knit.CreateService({
 })
 
 local DataService: any
-local SpeedService: any
+local PowerService: any
 local CarryService: any
 local BaseService: any
 
@@ -32,7 +32,7 @@ local cooldowns: { [Player]: { [string]: number } } = {}
 
 function CombatService:KnitInit()
 	DataService = Knit.GetService("DataService")
-	SpeedService = Knit.GetService("SpeedService")
+	PowerService = Knit.GetService("PowerService")
 	CarryService = Knit.GetService("CarryService")
 	BaseService = Knit.GetService("BaseService")
 end
@@ -113,7 +113,7 @@ function CombatService.Client:UseSlap(player: Player): (boolean, string)
 	if not data or not data.gear.Slap then
 		return false, "You don't own Slap"
 	end
-	if SpeedService:IsStunned(player) or not CharacterUtil.isAlive(player) then
+	if PowerService:IsStunned(player) or not CharacterUtil.isAlive(player) then
 		return false, "Can't right now"
 	end
 	if onCooldown(player, "Slap", C.slapCooldown) then
@@ -180,7 +180,7 @@ function CombatService.Client:PlaceTrap(player: Player): (boolean, string)
 			return
 		end
 		sprung = true
-		SpeedService:Stun(victim, C.trapStunSeconds)
+		PowerService:Stun(victim, C.trapStunSeconds)
 		self.Client.Effect:FireAll("trap", trap.Position, nil)
 		BaseService:Notify(victim, `You stepped on {player.DisplayName}'s trap!`, "warn")
 		trap:Destroy()

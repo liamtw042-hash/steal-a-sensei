@@ -51,7 +51,7 @@ local ZoneService = Knit.CreateService({
 	ScrollPickedUp = Signal.new(), -- (player, record)
 })
 
-local SpeedService: any
+local PowerService: any
 local CarryService: any
 
 local zones: { [number]: ZoneRecord } = {}
@@ -82,7 +82,7 @@ local function findPart(parent: Instance, name: string): BasePart?
 end
 
 function ZoneService:KnitInit()
-	SpeedService = Knit.GetService("SpeedService")
+	PowerService = Knit.GetService("PowerService")
 	CarryService = Knit.GetService("CarryService")
 
 	scrollsFolder = Instance.new("Folder")
@@ -111,7 +111,7 @@ function ZoneService:KnitInit()
 		local entrance = findPart(folder, "Entrance")
 		if entrance then
 			entrance:SetAttribute("ZoneId", def.id)
-			entrance:SetAttribute("SpeedRequirement", def.speedRequirement)
+			entrance:SetAttribute("PowerRequirement", def.powerRequirement)
 			entrance:SetAttribute("ZoneName", def.name)
 		end
 		folder:SetAttribute("ZoneId", def.id)
@@ -164,7 +164,7 @@ function ZoneService:MeetsRequirement(player: Player, zoneId: number): boolean
 	if not zone then
 		return false
 	end
-	return SpeedService:GetEffectiveSpeed(player) >= zone.def.speedRequirement
+	return PowerService:GetEffectivePower(player) >= zone.def.powerRequirement
 end
 
 --------------------------------------------------------------------------------
@@ -269,7 +269,7 @@ function ZoneService:_tryPickup(player: Player, zone: ZoneRecord, record: Scroll
 	if record.consumed then
 		return
 	end
-	if not CharacterUtil.isAlive(player) or SpeedService:IsStunned(player) then
+	if not CharacterUtil.isAlive(player) or PowerService:IsStunned(player) then
 		return
 	end
 	if not CarryService:CanCarry(player) then

@@ -32,7 +32,7 @@ local DataService: any
 local ZoneService: any
 local BaseService: any
 local FighterService: any
-local SpeedService: any
+local PowerService: any
 
 type Rift = {
 	model: Model,
@@ -52,7 +52,7 @@ function EventService:KnitInit()
 	ZoneService = Knit.GetService("ZoneService")
 	BaseService = Knit.GetService("BaseService")
 	FighterService = Knit.GetService("FighterService")
-	SpeedService = Knit.GetService("SpeedService")
+	PowerService = Knit.GetService("PowerService")
 end
 
 local function mapPoint(name: string): CFrame
@@ -246,10 +246,10 @@ function EventService.Client:BuyTokenItem(player: Player, key: string): (boolean
 		return false, "Not enough tokens"
 	end
 	local V = E.TokenShopValues
-	if key == "SpeedSmall" then
-		SpeedService:AddSpeed(player, V.SpeedSmall)
-	elseif key == "SpeedLarge" then
-		SpeedService:AddSpeed(player, V.SpeedLarge)
+	if key == "PowerSmall" then
+		PowerService:AddPower(player, V.PowerSmall)
+	elseif key == "PowerLarge" then
+		PowerService:AddPower(player, V.PowerLarge)
 	elseif key == "CashPack" then
 		local perSec = FighterService:GetIncomePerSecond(player)
 		DataService:AddCash(player, math.max(1000, perSec * 60 * V.CashPackMinutes))

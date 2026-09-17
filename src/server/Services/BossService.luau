@@ -27,7 +27,7 @@ local DataService: any
 local ZoneService: any
 local CarryService: any
 local BaseService: any
-local SpeedService: any
+local PowerService: any
 
 local brains: { [number]: BossBrain.BossBrain } = {}
 local clones: { BossBrain.BossBrain } = {}
@@ -38,7 +38,7 @@ function BossService:KnitInit()
 	ZoneService = Knit.GetService("ZoneService")
 	CarryService = Knit.GetService("CarryService")
 	BaseService = Knit.GetService("BaseService")
-	SpeedService = Knit.GetService("SpeedService")
+	PowerService = Knit.GetService("PowerService")
 end
 
 function BossService:_callbacks(): BossBrain.Callbacks
@@ -58,7 +58,7 @@ function BossService:_callbacks(): BossBrain.Callbacks
 		onStateChanged = function(brain, state, target)
 			self:_onStateChanged(brain, state, target)
 		end,
-		services = { CarryService = CarryService, SpeedService = SpeedService, BaseService = BaseService },
+		services = { CarryService = CarryService, PowerService = PowerService, BaseService = BaseService },
 	}
 end
 

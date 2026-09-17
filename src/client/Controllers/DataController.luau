@@ -14,14 +14,14 @@ local DataController = Knit.CreateController({
 	Cash = 0,
 	Tokens = 0,
 	Rebirths = 0,
-	Speed = 0, -- effective speed stat
+	Power = 0, -- effective Power stat (after gamepasses)
 	CashChanged = Signal.new(),
-	SpeedChanged = Signal.new(),
+	PowerChanged = Signal.new(),
 })
 
 function DataController:KnitStart()
 	local DataService = Knit.GetService("DataService")
-	local SpeedService = Knit.GetService("SpeedService")
+	local PowerService = Knit.GetService("PowerService")
 
 	DataService.Snapshot:Observe(function(data: Types.PlayerData?)
 		if data then
@@ -39,9 +39,9 @@ function DataController:KnitStart()
 	DataService.Rebirths:Observe(function(v: number)
 		self.Rebirths = v or 0
 	end)
-	SpeedService.Speed:Observe(function(v: number)
-		self.Speed = v or 0
-		self.SpeedChanged:Fire(self.Speed)
+	PowerService.Power:Observe(function(v: number)
+		self.Power = v or 0
+		self.PowerChanged:Fire(self.Power)
 	end)
 end
 

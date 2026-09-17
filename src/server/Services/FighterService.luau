@@ -726,9 +726,9 @@ function FighterService.Client:ClaimIndexReward(player: Player, zoneId: number):
 	data.indexClaimed[tostring(zoneId)] = true
 	data.skins[reward.skin] = true
 	DataService:AddCash(player, reward.cash)
-	Knit.GetService("SpeedService"):AddSpeed(player, reward.speed)
+	Knit.GetService("PowerService"):AddPower(player, reward.power)
 	DataService:Replicate(player)
-	return true, `+{Format.short(reward.speed)} speed, {Format.cash(reward.cash)}, {reward.skin} skin`
+	return true, `+{Format.short(reward.power)} Power, {Format.cash(reward.cash)}, {reward.skin} skin`
 end
 
 return FighterService

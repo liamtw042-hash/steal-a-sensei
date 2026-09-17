@@ -1,6 +1,6 @@
 # Status: what's verified, what needs a playtest, known limits
 
-Last updated 2026-09-16 (overnight visuals + functionality pass).
+Last updated 2026-09-17 (Speed replaced by the Power system).
 
 ## Verified
 
@@ -25,6 +25,11 @@ Roblox type definitions, StyLua formatting, `rojo build` to a place file.
 - Hub shop prompt opens the Shop window.
 - Phone layout (Studio device emulator, iPhone XR): HUD scales to ~0.55, rail/hotbar/tutorial
   card fit and don't overlap the joystick or jump button.
+- Power system: HUD reads “💪 N Power”, holding E at the base punching bag ticks Power up once
+  a second (0 → 150 in six punches at level 1), the Training panel shows the level, fill bar,
+  per-punch rate and live total, releasing E stops it, F buys the next bag level ($5K taken,
+  level 2 granted, prompt updated to $500K, rate 25 → 1,000 per punch), and the Bamboo Forest
+  gate reads “Requires 5K Power (you have 100)”.
 
 ## Needs a real playtest
 
@@ -47,9 +52,9 @@ Roblox type definitions, StyLua formatting, `rojo build` to a place file.
 - **StreamingEnabled is on** in the baseplate template. Far zones stream in as you approach.
   All gameplay is server-side so this is safe, but the client's zone prompt and tutorial
   arrow only appear once the relevant parts have streamed (a few hundred studs).
-- **Speed passes cap at 1024x total.** Owning 2x+4x+8x+16x already hits the cap; the
+- **Power passes cap at 1024x total.** Owning 2x+4x+8x+16x already hits the cap; the
   32x–1024x passes only matter if a player skipped lower ones. That's the brief as specified.
-  If you want every pass to be worth buying, make them additive (see `Config/Speed.luau`).
+  If you want every pass to be worth buying, make them additive (see `Config/Power.luau`).
 - **Like / favourite rewards can't be verified** (no Roblox API). Honour system with a 5s delay.
 - **Boss pathfinding depends on your map.** The generated corridors are wide and flat on
   purpose. Narrow doors, floating platforms or cliffs will strand bosses (there is a stuck

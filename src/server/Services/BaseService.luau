@@ -27,7 +27,7 @@ export type BaseRecord = {
 	entrance: BasePart?,
 	gates: { BasePart },
 	lockPad: BasePart?,
-	treadmill: BasePart?,
+	bag: BasePart?, -- the punching bag (PowerService trains against it)
 	spawn: BasePart?,
 	slots: { BasePart }, -- sorted by numeric suffix; slot index = position in this list
 	sign: BasePart?,
@@ -53,7 +53,7 @@ local BaseService = Knit.CreateService({
 })
 
 local DataService: any
-local SpeedService: any
+local PowerService: any
 local MonetizationService: any
 local CarryService: any
 
@@ -97,7 +97,7 @@ end
 
 function BaseService:KnitInit()
 	DataService = Knit.GetService("DataService")
-	SpeedService = Knit.GetService("SpeedService")
+	PowerService = Knit.GetService("PowerService")
 	MonetizationService = Knit.GetService("MonetizationService")
 	CarryService = Knit.GetService("CarryService")
 
@@ -119,7 +119,7 @@ function BaseService:KnitInit()
 			entrance = findPart(folder, "Entrance"),
 			gates = partsIn(folder:FindFirstChild("Gates"), false),
 			lockPad = findPart(folder, "LockPad"),
-			treadmill = findPart(folder, "Treadmill"),
+			bag = findPart(folder, "PunchingBag"),
 			spawn = findPart(folder, "Spawn"),
 			slots = partsIn(folder:FindFirstChild("Slots"), true),
 			sign = findPart(folder, "Sign"),
@@ -505,8 +505,8 @@ function BaseService:_onIntruderEntered(base: BaseRecord, intruder: Player)
 	if data and data.alarmTrap and base.alarmReadyAt <= now() then
 		local A = Config.Base.AlarmTrap
 		base.alarmReadyAt = now() + A.cooldownSeconds
-		SpeedService:Stun(intruder, A.stunSeconds)
-		SpeedService:AddModifier(owner, "alarmBoost", A.ownerSpeedMultiplier, A.ownerBoostSeconds)
+		PowerService:Stun(intruder, A.stunSeconds)
+		PowerService:AddModifier(owner, "alarmBoost", A.ownerSpeedMultiplier, A.ownerBoostSeconds)
 		self:Notify(owner, `ALARM! {intruder.DisplayName} is in your base!`, "alarm")
 		self:Notify(intruder, "You triggered an alarm trap!", "warn")
 	end
@@ -545,7 +545,7 @@ function BaseService:_spawnGuard(base: BaseRecord)
 					if pos and base.region and Region.isPointInPart(base.region, pos) then
 						intruder = p
 						if (pos - root.Position).Magnitude <= G.slowRadius then
-							SpeedService:AddModifier(p, "guardSlow", G.slowMultiplier, G.slowSeconds)
+							PowerService:AddModifier(p, "guardSlow", G.slowMultiplier, G.slowSeconds)
 						end
 						break
 					end

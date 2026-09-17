@@ -2,7 +2,7 @@
 --[[
 	REBIRTH
 	=======
-	Wipes cash + fighters. Keeps speed, index, gamepasses, treadmill level.
+	Wipes cash + fighters. Keeps Power, index, gamepasses, punching bag level.
 	Gains: cash multiplier, +1 slot, +10s lock, gear unlocks.
 ]]
 

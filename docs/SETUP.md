@@ -73,7 +73,7 @@ All numbers live in `src/shared/Config/`:
 | --- | --- |
 | `Zones.luau` | the ten zones, every boss speed / catch radius / gimmick number, scroll rarity pools, respawn times |
 | `Fighters.luau` | rarities, cash-per-second, hatch times, mutations, levelling, fuse rule, the roster, index rewards |
-| `Speed.luau` | speed-stat → WalkSpeed curve, free rewards (+ group id), treadmill rates/costs, speed passes |
+| `Power.luau` | Power → WalkSpeed curve, free rewards (+ group id), punching bag rates/costs, Power passes |
 | `Base.luau` | lock timings, slot counts, theft slow, guard, alarm trap, VIP cash multiplier |
 | `Rebirth.luau` | the 16-rebirth requirement table, max multiplier, gear unlocks |
 | `Monetization.luau` | gamepass + developer product ids/prices, combat item numbers |

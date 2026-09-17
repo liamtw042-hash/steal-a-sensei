@@ -2,7 +2,7 @@
 --[[
 	Bases: fenced plots on grass. Each base gets its own fence colour, a stone path,
 	glowing lock pad, laser-beam gate (Lasers folder, beams toggled by BaseService),
-	subtle slot pads, a treadmill prop and a spawn mat. Every named part the scripts
+	subtle slot pads, a punching bag and a spawn mat. Every named part the scripts
 	expect is created here (see docs/STUDIO_CHECKLIST.md).
 ]]
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -33,58 +33,65 @@ local function invisibleWall(size: Vector3, cf: CFrame, parent: Instance)
 	)
 end
 
-local function treadmill(cf: CFrame, parent: Instance): Part
-	local m = Build.model("TreadmillProp", parent)
-	local base = Build.block(
-		Vector3.new(6, 0.6, 9),
-		cf * CFrame.new(0, 0.3, 0),
-		Color3.fromRGB(60, 60, 70),
-		Enum.Material.Metal,
-		m
-	)
-	Build.block(
-		Vector3.new(4.6, 0.3, 7.4),
-		cf * CFrame.new(0, 0.75, 0),
-		Color3.fromRGB(35, 35, 40),
-		Enum.Material.Fabric,
-		m
-	) -- belt
-	for _, z in { -3.9, 3.9 } do
+-- Punching bag: hold E here to train Power. Returns the bag body (the part that swings).
+local function punchingBag(cf: CFrame, parent: Instance): Part
+	local m = Build.model("PunchingBagProp", parent)
+	-- mat you stand on
+	Build.cyl(Vector3.new(9, 0.4, 9), cf * CFrame.new(0, 0.2, 0), Color3.fromRGB(70, 60, 80), Enum.Material.Fabric, m)
+	-- frame: two posts + crossbar
+	for _, x in { -3.4, 3.4 } do
 		Build.cyl(
-			Vector3.new(0.9, 5, 0.9),
-			cf * CFrame.new(0, 0.75, z) * CFrame.Angles(0, 0, math.rad(90)),
-			Color3.fromRGB(200, 200, 210),
+			Vector3.new(0.7, 11, 0.7),
+			cf * CFrame.new(x, 5.5, 0),
+			Color3.fromRGB(70, 70, 80),
 			Enum.Material.Metal,
 			m
 		)
-	end
-	-- handrail + console
-	for _, x in { -2.6, 2.6 } do
-		Build.block(
-			Vector3.new(0.3, 3, 0.3),
-			cf * CFrame.new(x, 1.8, -3.5),
-			Color3.fromRGB(200, 200, 210),
+		Build.cyl(
+			Vector3.new(2.2, 0.5, 2.2),
+			cf * CFrame.new(x, 0.45, 0),
+			Color3.fromRGB(50, 50, 60),
 			Enum.Material.Metal,
 			m
 		)
 	end
 	Build.block(
-		Vector3.new(5.5, 0.3, 0.3),
-		cf * CFrame.new(0, 3.3, -3.5),
-		Color3.fromRGB(200, 200, 210),
+		Vector3.new(7.5, 0.7, 0.7),
+		cf * CFrame.new(0, 11, 0),
+		Color3.fromRGB(70, 70, 80),
 		Enum.Material.Metal,
 		m
 	)
-	local screen = Build.block(
-		Vector3.new(3, 1.6, 0.3),
-		cf * CFrame.new(0, 3.6, -3.6),
-		Color3.fromRGB(80, 220, 255),
+	-- chain
+	for i = 0, 2 do
+		Build.cyl(
+			Vector3.new(0.35, 0.9, 0.35),
+			cf * CFrame.new(0, 10.3 - i * 0.8, 0),
+			Color3.fromRGB(190, 190, 200),
+			Enum.Material.Metal,
+			m
+		)
+	end
+	-- the bag itself
+	local bag = Build.cyl(
+		Vector3.new(2.8, 6, 2.8),
+		cf * CFrame.new(0, 5.2, 0),
+		Color3.fromRGB(190, 45, 55),
+		Enum.Material.SmoothPlastic,
+		m
+	)
+	for _, y in { 7.6, 2.9 } do
+		Build.cyl(Vector3.new(3, 0.5, 3), cf * CFrame.new(0, y, 0), Color3.fromRGB(60, 55, 60), Enum.Material.Fabric, m)
+	end
+	Build.cyl(
+		Vector3.new(3.05, 0.6, 3.05),
+		cf * CFrame.new(0, 5.2, 0),
+		Color3.fromRGB(255, 220, 120),
 		Enum.Material.Neon,
 		m
 	)
-	Build.light(screen, Color3.fromRGB(80, 220, 255), 8, 1)
-	Build.label(screen, "TREADMILL", Color3.fromRGB(80, 220, 255), 2, 110, 45)
-	return base
+	Build.label(bag, "🥊 PUNCHING BAG\nhold E to train", Color3.fromRGB(255, 190, 120), 5, 210, 55)
+	return bag
 end
 
 local function lockPad(cf: CFrame, parent: Instance): Part
@@ -239,7 +246,7 @@ function Bases.build(parent: Folder, index: number)
 		beam.Parent = lasers
 	end
 
-	-- Entrance pad outside the gate, lock pad inside, treadmill and spawn in the corners
+	-- Entrance pad outside the gate, lock pad inside, punching bag and spawn in the corners
 	Build.part({
 		Name = "Entrance",
 		Size = Vector3.new(8, 0.4, 6),
@@ -250,9 +257,30 @@ function Bases.build(parent: Folder, index: number)
 	local pad = lockPad(CFrame.new(center + Vector3.new(0, 0, hd - 7)), deco)
 	pad.Name = "LockPad"
 	pad.Parent = bf
-	local tm = treadmill(CFrame.new(center + Vector3.new(hw - 6, 0, hd - 8)), deco)
-	tm.Name = "Treadmill"
-	tm.Parent = bf
+	local bag = punchingBag(CFrame.new(center + Vector3.new(hw - 7, 0, hd - 9)), deco)
+	bag.Name = "PunchingBag"
+	bag.Parent = bf
+
+	-- hold-E training prompt + the upgrade prompt (PowerService fills in the cost)
+	local train = Instance.new("ProximityPrompt")
+	train.Name = "TrainPrompt"
+	train.ActionText = "Train"
+	train.ObjectText = "Punching Bag"
+	train.KeyboardKeyCode = Enum.KeyCode.E
+	train.HoldDuration = 86400 -- never completes; we act on hold begin/end instead
+	train.MaxActivationDistance = 12
+	train.RequiresLineOfSight = false
+	train.Parent = bag
+	local upgrade = Instance.new("ProximityPrompt")
+	upgrade.Name = "UpgradePrompt"
+	upgrade.ActionText = "Upgrade"
+	upgrade.ObjectText = "Punching Bag"
+	upgrade.KeyboardKeyCode = Enum.KeyCode.F
+	upgrade.HoldDuration = 0.35
+	upgrade.MaxActivationDistance = 12
+	upgrade.RequiresLineOfSight = false
+	upgrade.UIOffset = Vector2.new(0, 70)
+	upgrade.Parent = bag
 	local spawnMat = Build.cyl(
 		Vector3.new(5, 0.4, 5),
 		CFrame.new(center + Vector3.new(-hw + 6, 0.2, hd - 8)),

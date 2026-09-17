@@ -42,7 +42,7 @@ function IndexController:Refresh()
 		end
 	end
 	Make.text({
-		Text = `Discovered <b>{found}/{total}</b> fighters. Complete a zone's set for speed, cash and a skin.`,
+		Text = `Discovered <b>{found}/{total}</b> fighters. Complete a zone's set for Power, cash and a skin.`,
 		Size = UDim2.new(1, 0, 0, 24),
 		Parent = scroll,
 	})
@@ -98,7 +98,7 @@ function IndexController:Refresh()
 		})
 		if reward then
 			Make.text({
-				Text = `Reward: +{Format.short(reward.speed)} speed, {Format.cash(reward.cash)}, "{reward.skin}" skin`,
+				Text = `Reward: +{Format.short(reward.power)} Power, {Format.cash(reward.cash)}, "{reward.skin}" skin`,
 				TextColor3 = Theme.muted,
 				TextSize = 13,
 				Parent = card,

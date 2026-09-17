@@ -1,6 +1,6 @@
 --!strict
 --[[
-	ZoneController: zone gate walls are walk-through locally once you meet the speed
+	ZoneController: zone gate walls are walk-through locally once you meet the Power
 	requirement (the server still validates on pickup), and a prompt shows the requirement
 	when you're near an entrance.
 ]]
@@ -72,7 +72,7 @@ function ZoneController:KnitStart()
 			if entrance and entrance:IsA("BasePart") then
 				table.insert(
 					entries,
-					{ zoneId = def.id, name = def.name, requirement = def.speedRequirement, entrance = entrance }
+					{ zoneId = def.id, name = def.name, requirement = def.powerRequirement, entrance = entrance }
 				)
 			end
 		end
@@ -85,13 +85,13 @@ function ZoneController:KnitStart()
 	local player = Players.LocalPlayer
 	task.spawn(function()
 		while true do
-			local speed = DataController.Speed
+			local power = DataController.Power
 			local char = player.Character
 			local root = if char then char:FindFirstChild("HumanoidRootPart") else nil
 			local nearest: Entry? = nil
 			local nearestDist = 30
 			for _, e in entries do
-				local unlocked = speed >= e.requirement
+				local unlocked = power >= e.requirement
 				e.entrance.CanCollide = not unlocked
 				e.entrance.CanTouch = false
 				if root and root:IsA("BasePart") then
@@ -103,13 +103,13 @@ function ZoneController:KnitStart()
 				end
 			end
 			if nearest then
-				local unlocked = speed >= nearest.requirement
+				local unlocked = power >= nearest.requirement
 				promptFrame.Visible = true
 				promptTitle.Text = nearest.name
 				promptTitle.TextColor3 = if unlocked then Theme.green else Theme.red
 				promptBody.Text = if unlocked
 					then "Gate open — grab a scroll and run home!"
-					else `🔒 Requires {Format.short(nearest.requirement)} speed (you have {Format.short(speed)})`
+					else `🔒 Requires {Format.short(nearest.requirement)} Power (you have {Format.short(power)})`
 			else
 				promptFrame.Visible = false
 			end

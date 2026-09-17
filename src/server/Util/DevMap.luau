@@ -20,8 +20,15 @@ local Zones = require(script.Parent.Parent.Map.Zones)
 local DevMap = {}
 
 function DevMap.ensure()
-	if Workspace:FindFirstChild("Map") then
+	-- An EMPTY Map folder (e.g. left behind by an asset import) is not a map: generating
+	-- anyway beats leaving the server with no bases and no zones.
+	local existing = Workspace:FindFirstChild("Map")
+	if existing and #existing:GetChildren() > 0 then
 		return
+	end
+	if existing then
+		warn("[DevMap] Workspace.Map exists but is empty; building the built-in map into it.")
+		existing:Destroy()
 	end
 	warn(
 		"[DevMap] No Workspace.Map found: generating the built-in map so the game is playable. "

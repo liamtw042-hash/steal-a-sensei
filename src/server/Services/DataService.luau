@@ -21,12 +21,12 @@ type PlayerData = Types.PlayerData
 
 local function template(): PlayerData
 	return {
-		version = 1,
+		version = 2,
 		cash = Config.General.startingCash,
-		speed = 0,
+		power = 0,
 		tokens = 0,
 		rebirths = 0,
-		treadmillLevel = 1,
+		bagLevel = 1,
 		nextFighterId = 1,
 		fighters = {},
 		hatching = {},
@@ -42,6 +42,45 @@ local function template(): PlayerData
 		tutorialDone = false,
 		stats = { scrollsSecured = 0, fightersStolen = 0, timesCaught = 0, playtime = 0 },
 	}
+end
+
+-- v1 -> v2: the Speed stat became Power, the treadmill became the punching bag, and the
+-- Speed gamepasses became Power gamepasses. Reconcile() adds the new fields with defaults;
+-- this moves the old values across so nobody loses progress, then stamps the version.
+local GAMEPASS_RENAMES: { [string]: string } = {
+	Speed2x = "Power2x",
+	Speed4x = "Power4x",
+	Speed8x = "Power8x",
+	Speed16x = "Power16x",
+	Speed32x = "Power32x",
+	Speed64x = "Power64x",
+	Speed128x = "Power128x",
+	Speed256x = "Power256x",
+	Speed512x = "Power512x",
+	Speed1024x = "Power1024x",
+}
+
+local function migrate(data: PlayerData)
+	local raw = data :: any
+	if typeof(raw.speed) == "number" then
+		data.power = math.max(data.power, raw.speed)
+		raw.speed = nil
+	end
+	if typeof(raw.treadmillLevel) == "number" then
+		-- the old treadmill had 40 levels, the bag has 5: compress 8:1 so level 40 lands on 5
+		local mapped = math.clamp(math.ceil(raw.treadmillLevel / 8), 1, Config.Power.PunchingBag.maxLevel)
+		data.bagLevel = math.max(data.bagLevel, mapped)
+		raw.treadmillLevel = nil
+	end
+	for old, new in GAMEPASS_RENAMES do
+		if raw.gamepasses[old] ~= nil then
+			if raw.gamepasses[old] then
+				raw.gamepasses[new] = true
+			end
+			raw.gamepasses[old] = nil
+		end
+	end
+	data.version = 2
 end
 
 local DataService = Knit.CreateService({
@@ -116,6 +155,7 @@ function DataService:_load(player: Player)
 	end
 	profile:AddUserId(player.UserId)
 	profile:Reconcile()
+	migrate(profile.Data :: PlayerData)
 	profile:ListenToRelease(function()
 		profiles[player] = nil
 		if player.Parent then

@@ -29,12 +29,12 @@ export type Gear = {
 }
 
 export type PlayerData = {
-	version: number,
+	version: number, -- 1 = pre-Power (speed/treadmillLevel), 2 = Power/bagLevel
 	cash: number,
-	speed: number, -- raw stat before gamepass multipliers
+	power: number, -- raw Power stat before gamepass multipliers
 	tokens: number,
 	rebirths: number,
-	treadmillLevel: number,
+	bagLevel: number, -- punching bag upgrade level (1..Config.Power.PunchingBag.maxLevel)
 	nextFighterId: number,
 	fighters: { [string]: Fighter },
 	hatching: { [string]: HatchingScroll }, -- key = tostring(slotIndex)

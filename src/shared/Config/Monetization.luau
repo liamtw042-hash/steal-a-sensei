@@ -19,28 +19,28 @@ export type ProductDef = {
 }
 
 local Gamepasses: { GamepassDef } = {
-	-- Speed ladder (each is a separate multiplicative pass)
-	{ key = "Speed2x", name = "2x Speed", price = 5, id = 0, description = "Multiplies your speed stat by 2." },
-	{ key = "Speed4x", name = "4x Speed", price = 10, id = 0, description = "Multiplies your speed stat by 4." },
-	{ key = "Speed8x", name = "8x Speed", price = 20, id = 0, description = "Multiplies your speed stat by 8." },
-	{ key = "Speed16x", name = "16x Speed", price = 40, id = 0, description = "Multiplies your speed stat by 16." },
-	{ key = "Speed32x", name = "32x Speed", price = 80, id = 0, description = "Multiplies your speed stat by 32." },
-	{ key = "Speed64x", name = "64x Speed", price = 160, id = 0, description = "Multiplies your speed stat by 64." },
-	{ key = "Speed128x", name = "128x Speed", price = 320, id = 0, description = "Multiplies your speed stat by 128." },
-	{ key = "Speed256x", name = "256x Speed", price = 640, id = 0, description = "Multiplies your speed stat by 256." },
+	-- Power ladder (each is a separate multiplicative pass)
+	{ key = "Power2x", name = "2x Power", price = 5, id = 0, description = "Multiplies your Power by 2." },
+	{ key = "Power4x", name = "4x Power", price = 10, id = 0, description = "Multiplies your Power by 4." },
+	{ key = "Power8x", name = "8x Power", price = 20, id = 0, description = "Multiplies your Power by 8." },
+	{ key = "Power16x", name = "16x Power", price = 40, id = 0, description = "Multiplies your Power by 16." },
+	{ key = "Power32x", name = "32x Power", price = 80, id = 0, description = "Multiplies your Power by 32." },
+	{ key = "Power64x", name = "64x Power", price = 160, id = 0, description = "Multiplies your Power by 64." },
+	{ key = "Power128x", name = "128x Power", price = 320, id = 0, description = "Multiplies your Power by 128." },
+	{ key = "Power256x", name = "256x Power", price = 640, id = 0, description = "Multiplies your Power by 256." },
 	{
-		key = "Speed512x",
-		name = "512x Speed",
+		key = "Power512x",
+		name = "512x Power",
 		price = 1280,
 		id = 0,
-		description = "Multiplies your speed stat by 512.",
+		description = "Multiplies your Power by 512.",
 	},
 	{
-		key = "Speed1024x",
-		name = "1024x Speed",
+		key = "Power1024x",
+		name = "1024x Power",
 		price = 2560,
 		id = 0,
-		description = "Multiplies your speed stat by 1024.",
+		description = "Multiplies your Power by 1024.",
 	},
 	-- Other passes
 	{ key = "VIP", name = "VIP", price = 200, id = 0, description = "2x cash, +10s base lock, VIP tag." },

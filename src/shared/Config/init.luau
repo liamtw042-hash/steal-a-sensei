@@ -3,7 +3,7 @@
 local Config = {
 	Zones = require(script.Zones),
 	Fighters = require(script.Fighters),
-	Speed = require(script.Speed),
+	Power = require(script.Power),
 	Base = require(script.Base),
 	Rebirth = require(script.Rebirth),
 	Monetization = require(script.Monetization),

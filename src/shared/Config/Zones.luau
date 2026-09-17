@@ -4,9 +4,9 @@
 	==============
 	Every boss speed and gimmick number lives here. Tune freely.
 
-	How speed works: a player's "speed" stat (a big number, e.g. 5K, 500B) is mapped
-	to an actual Humanoid.WalkSpeed by Config.Speed.WalkSpeedCurve. Each zone's
-	`speedRequirement` is the stat needed to open its gate, and `bossWalkSpeed` is
+	How the gates work: a player's Power stat (a big number, e.g. 5K, 500B) is mapped
+	to an actual Humanoid.WalkSpeed by Config.Power.WalkSpeedCurve. Each zone's
+	`powerRequirement` is the Power needed to open its gate, and the boss's walkSpeed is
 	set a touch below the WalkSpeed that requirement maps to, so a player who *just*
 	meets the requirement can outrun the boss cleanly.
 
@@ -47,7 +47,7 @@ export type ZoneDef = {
 	id: number,
 	name: string,
 	folderName: string,
-	speedRequirement: number,
+	powerRequirement: number,
 	scrollPool: { ScrollPoolEntry },
 	scrollRespawnSeconds: number,
 	boss: BossDef,
@@ -83,7 +83,7 @@ local Zones: { ZoneDef } = {
 		id = 1,
 		name = "Training Grounds",
 		folderName = "TrainingGrounds",
-		speedRequirement = 0,
+		powerRequirement = 0,
 		scrollPool = { { rarity = "Common", weight = 100 } },
 		scrollRespawnSeconds = 20,
 		boss = boss("Brute", "Brute", 13, "None", {}, Color3.fromRGB(150, 90, 60)),
@@ -92,7 +92,7 @@ local Zones: { ZoneDef } = {
 		id = 2,
 		name = "Bamboo Forest",
 		folderName = "BambooForest",
-		speedRequirement = 5_000,
+		powerRequirement = 5_000,
 		scrollPool = { { rarity = "Common", weight = 65 }, { rarity = "Uncommon", weight = 35 } },
 		scrollRespawnSeconds = 25,
 		boss = boss("Swordsman", "Swordsman", 19, "None", {}, Color3.fromRGB(80, 140, 70)),
@@ -101,7 +101,7 @@ local Zones: { ZoneDef } = {
 		id = 3,
 		name = "Shadow Village",
 		folderName = "ShadowVillage",
-		speedRequirement = 50_000,
+		powerRequirement = 50_000,
 		scrollPool = { { rarity = "Uncommon", weight = 100 } },
 		scrollRespawnSeconds = 30,
 		-- loses the carrier after `loseAfterSeconds` of broken line of sight
@@ -111,7 +111,7 @@ local Zones: { ZoneDef } = {
 		id = 4,
 		name = "Storm Peak",
 		folderName = "StormPeak",
-		speedRequirement = 500_000,
+		powerRequirement = 500_000,
 		scrollPool = { { rarity = "Rare", weight = 100 } },
 		scrollRespawnSeconds = 35,
 		-- teleports to `teleportDistance` studs behind the carrier every `intervalSeconds`
@@ -128,7 +128,7 @@ local Zones: { ZoneDef } = {
 		id = 5,
 		name = "Frozen Temple",
 		folderName = "FrozenTemple",
-		speedRequirement = 5_000_000,
+		powerRequirement = 5_000_000,
 		scrollPool = { { rarity = "Rare", weight = 100 } },
 		scrollRespawnSeconds = 40,
 		-- drops a patch every `intervalSeconds`; patch lasts `patchLifetime`, slows to `slowMultiplier` for `slowSeconds`
@@ -145,7 +145,7 @@ local Zones: { ZoneDef } = {
 		id = 6,
 		name = "Volcanic Dojo",
 		folderName = "VolcanicDojo",
-		speedRequirement = 50_000_000,
+		powerRequirement = 50_000_000,
 		scrollPool = { { rarity = "Epic", weight = 100 } },
 		scrollRespawnSeconds = 45,
 		-- fire trail: `damage` per `damageIntervalSeconds` while standing in it
@@ -162,7 +162,7 @@ local Zones: { ZoneDef } = {
 		id = 7,
 		name = "Abyss Shrine",
 		folderName = "AbyssShrine",
-		speedRequirement = 500_000_000,
+		powerRequirement = 500_000_000,
 		scrollPool = { { rarity = "Epic", weight = 100 } },
 		scrollRespawnSeconds = 50,
 		-- within `pullRadius` studs it yanks you back with `pullForce` every `intervalSeconds`
@@ -179,7 +179,7 @@ local Zones: { ZoneDef } = {
 		id = 8,
 		name = "Ancient Ruins",
 		folderName = "AncientRuins",
-		speedRequirement = 5_000_000_000,
+		powerRequirement = 5_000_000_000,
 		scrollPool = { { rarity = "Legendary", weight = 100 } },
 		scrollRespawnSeconds = 60,
 		-- throws a boulder every `intervalSeconds`, flight time `flightSeconds`, stuns within `blastRadius` for `stunSeconds`
@@ -196,7 +196,7 @@ local Zones: { ZoneDef } = {
 		id = 9,
 		name = "Celestial Gate",
 		folderName = "CelestialGate",
-		speedRequirement = 50_000_000_000,
+		powerRequirement = 50_000_000_000,
 		scrollPool = { { rarity = "Legendary", weight = 100 } },
 		scrollRespawnSeconds = 75,
 		-- spawns `count` clones every `intervalSeconds`; clones live `cloneLifetime`s at `cloneSpeedMultiplier` speed
@@ -213,7 +213,7 @@ local Zones: { ZoneDef } = {
 		id = 10,
 		name = "Sakura Void",
 		folderName = "SakuraVoid",
-		speedRequirement = 500_000_000_000,
+		powerRequirement = 500_000_000_000,
 		scrollPool = { { rarity = "Mythic", weight = 90 }, { rarity = "Secret", weight = 10 } },
 		scrollRespawnSeconds = 90,
 		boss = boss(

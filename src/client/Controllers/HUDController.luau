@@ -1,6 +1,6 @@
 --!strict
 --[[
-	HUDController: always-visible HUD. Cash + speed (top-left), income, base lock status +
+	HUDController: always-visible HUD. Cash + Power (top-left), income, base lock status +
 	lock button (top-right), carrying indicator + boss warning (top-centre), the left-hand
 	button rail other controllers register their windows on, and server alerts as toasts.
 ]]
@@ -13,7 +13,7 @@ local Knit = require(ReplicatedStorage.Packages.Knit) :: any
 local Config = require(ReplicatedStorage.Shared.Config)
 local Format = require(ReplicatedStorage.Shared.Util.Format)
 local Economy = require(ReplicatedStorage.Shared.Util.Economy)
-local SpeedMath = require(ReplicatedStorage.Shared.Util.SpeedMath)
+local PowerMath = require(ReplicatedStorage.Shared.Util.PowerMath)
 local Make = require(script.Parent.Parent.UI.Make)
 local Theme = require(script.Parent.Parent.UI.Theme)
 local Toast = require(script.Parent.Parent.UI.Toast)
@@ -26,7 +26,7 @@ local gui: ScreenGui
 local rail: Frame
 local cashLabel: TextLabel
 local incomeLabel: TextLabel
-local speedLabel: TextLabel
+local powerLabel: TextLabel
 local walkLabel: TextLabel
 local carryLabel: TextLabel
 local bossLabel: TextLabel
@@ -71,8 +71,8 @@ function HUDController:KnitInit()
 		Size = UDim2.new(1, 0, 0, 16),
 		Parent = stats,
 	})
-	speedLabel = Make.display({
-		Text = "⚡ 0 speed",
+	powerLabel = Make.display({
+		Text = "💪 0 Power",
 		TextSize = 22,
 		TextColor3 = Theme.accent2,
 		Size = UDim2.new(1, 0, 0, 26),
@@ -168,14 +168,14 @@ function HUDController:KnitStart()
 	local CarryService = Knit.GetService("CarryService")
 	local FighterService = Knit.GetService("FighterService")
 	local TheftService = Knit.GetService("TheftService")
-	local SpeedService = Knit.GetService("SpeedService")
+	local PowerService = Knit.GetService("PowerService")
 
 	DataController.CashChanged:Connect(function(cash: number)
 		cashLabel.Text = "💰 " .. Format.cash(cash)
 	end)
-	DataController.SpeedChanged:Connect(function(speed: number)
-		speedLabel.Text = `⚡ {Format.short(speed)} speed`
-		walkLabel.Text = `walk speed {string.format("%.1f", SpeedMath.walkSpeedFor(speed))}`
+	DataController.PowerChanged:Connect(function(power: number)
+		powerLabel.Text = `💪 {Format.short(power)} Power`
+		walkLabel.Text = `walk speed {string.format("%.1f", PowerMath.walkSpeedFor(power))}`
 	end)
 	DataController:Observe(function(data)
 		incomeLabel.Text =
@@ -184,11 +184,11 @@ function HUDController:KnitStart()
 			)})`
 		tokensLabel.Text = if data.tokens > 0 then `✦ {data.tokens} rift tokens` else ""
 	end)
-	SpeedService.TreadmillActive:Observe(function(active: boolean)
+	PowerService.Training:Observe(function(active: boolean)
 		if active then
 			local data = DataController:Get()
-			local rate = if data then Config.Speed.Treadmill.ratePerSecond(data.treadmillLevel) else 0
-			walkLabel.Text = `🏃 treadmill +{Format.short(rate)} speed/s`
+			local per = if data then Config.Power.punchPower(data.bagLevel) else 0
+			walkLabel.Text = `🥊 training +{Format.short(per)} Power / punch`
 		end
 	end)
 

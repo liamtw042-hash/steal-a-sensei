@@ -96,7 +96,7 @@ function RebirthController:Refresh()
 	local loseCard = Make.card({ Parent = body })
 	Make.text({ Text = "You lose", TextSize = 18, TextColor3 = Theme.red, Parent = loseCard })
 	Make.text({
-		Text = "• All cash\n• All fighters, hatching scrolls and your scroll bag\n• Any of your fighters currently being stolen vanish\n\nYou keep: speed, treadmill level, index, skins, gamepasses, gear.",
+		Text = "• All cash\n• All fighters, hatching scrolls and your scroll bag\n• Any of your fighters currently being stolen vanish\n\nYou keep: Power, punching bag level, index, skins, gamepasses, gear.",
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		Parent = loseCard,

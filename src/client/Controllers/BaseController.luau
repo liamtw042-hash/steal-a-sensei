@@ -139,7 +139,7 @@ function BaseController:Refresh()
 	local DataController = Knit.GetController("DataController")
 	local BaseService = Knit.GetService("BaseService")
 	local FighterService = Knit.GetService("FighterService")
-	local SpeedService = Knit.GetService("SpeedService")
+	local PowerService = Knit.GetService("PowerService")
 	local data = DataController:Get()
 	if not data then
 		return
@@ -300,26 +300,35 @@ function BaseController:Refresh()
 
 	-- Upgrades
 	clear(upgradesFrame)
-	local T = Config.Speed.Treadmill
+	local BAG = Config.Power.PunchingBag
 	local tCard = Make.card({ Parent = upgradesFrame })
-	Make.text({ Text = `🏃 Treadmill — level {data.treadmillLevel}/{T.maxLevel}`, TextSize = 18, Parent = tCard })
 	Make.text({
-		Text = `Stand on it to gain <b>{Format.short(T.ratePerSecond(data.treadmillLevel))} speed/s</b>. Next level: {Format.short(
-			T.ratePerSecond(data.treadmillLevel + 1)
-		)}/s`,
-		TextColor3 = Theme.muted,
-		Size = UDim2.new(1, 0, 0, 36),
+		Text = `🥊 Punching Bag — level {data.bagLevel}/{BAG.maxLevel}`,
+		TextSize = 18,
 		Parent = tCard,
 	})
-	if data.treadmillLevel < T.maxLevel then
+	local nextCost = Config.Power.bagUpgradeCost(data.bagLevel)
+	Make.text({
+		Text = if nextCost
+			then `Hold <b>E</b> at the bag in your base to train. <b>{Format.short(
+				Config.Power.punchPower(data.bagLevel)
+			)} Power</b> per punch. Next level: {Format.short(Config.Power.punchPower(data.bagLevel + 1))} per punch.`
+			else `Hold <b>E</b> at the bag in your base to train. <b>{Format.short(
+				Config.Power.punchPower(data.bagLevel)
+			)} Power</b> per punch — fully upgraded.`,
+		TextColor3 = Theme.muted,
+		Size = UDim2.new(1, 0, 0, 40),
+		Parent = tCard,
+	})
+	if nextCost then
 		Make.button({
-			Text = `Upgrade for {Format.cash(T.upgradeCost(data.treadmillLevel))}`,
+			Text = `Upgrade for {Format.cash(nextCost)}`,
 			Size = UDim2.fromOffset(240, 34),
 			BackgroundColor3 = Theme.accent2,
 			TextColor3 = Theme.bg,
 			Parent = tCard,
 		}, function()
-			local ok, msg = SpeedService:UpgradeTreadmill()
+			local ok, msg = PowerService:UpgradeBag()
 			Toast.show(msg, if ok then "success" else "warn")
 		end)
 	end

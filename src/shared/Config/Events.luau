@@ -9,8 +9,8 @@
 export type TokenItem = { key: string, name: string, cost: number, description: string }
 
 local TokenShop: { TokenItem } = {
-	{ key = "SpeedSmall", name = "+50K Speed", cost = 10, description = "Permanent +50,000 speed." },
-	{ key = "SpeedLarge", name = "+5M Speed", cost = 60, description = "Permanent +5,000,000 speed." },
+	{ key = "PowerSmall", name = "+50K Power", cost = 10, description = "Permanent +50,000 Power." },
+	{ key = "PowerLarge", name = "+5M Power", cost = 60, description = "Permanent +5,000,000 Power." },
 	{ key = "CashPack", name = "Cash Pack", cost = 15, description = "Cash equal to 10 minutes of your income." },
 	{ key = "RareScroll", name = "Rare Scroll", cost = 40, description = "A Rare scroll straight into your base." },
 	{ key = "EpicScroll", name = "Epic Scroll", cost = 120, description = "An Epic scroll straight into your base." },
@@ -51,8 +51,8 @@ local Events = {
 	},
 	TokenShop = TokenShop,
 	TokenShopValues = {
-		SpeedSmall = 50_000,
-		SpeedLarge = 5_000_000,
+		PowerSmall = 50_000,
+		PowerLarge = 5_000_000,
 		CashPackMinutes = 10,
 	},
 }

@@ -124,17 +124,17 @@ local Roster: { FighterDef } = {
 }
 
 -- Reward for completing a zone's Index set (every fighter with that zoneId hatched at least once).
-local IndexRewards: { [number]: { speed: number, cash: number, skin: string } } = {
-	[1] = { speed = 2_000, cash = 50_000, skin = "Novice Headband" },
-	[2] = { speed = 15_000, cash = 500_000, skin = "Bamboo Cloak" },
-	[3] = { speed = 120_000, cash = 5_000_000, skin = "Shadow Mask" },
-	[4] = { speed = 1_200_000, cash = 50_000_000, skin = "Storm Aura" },
-	[5] = { speed = 12_000_000, cash = 500_000_000, skin = "Frost Trail" },
-	[6] = { speed = 120_000_000, cash = 5_000_000_000, skin = "Ember Wings" },
-	[7] = { speed = 1_200_000_000, cash = 50_000_000_000, skin = "Abyss Crown" },
-	[8] = { speed = 12_000_000_000, cash = 500_000_000_000, skin = "Golem Armour" },
-	[9] = { speed = 120_000_000_000, cash = 5_000_000_000_000, skin = "Celestial Halo" },
-	[10] = { speed = 1_200_000_000_000, cash = 50_000_000_000_000, skin = "Sakura Void Form" },
+local IndexRewards: { [number]: { power: number, cash: number, skin: string } } = {
+	[1] = { power = 2_000, cash = 50_000, skin = "Novice Headband" },
+	[2] = { power = 15_000, cash = 500_000, skin = "Bamboo Cloak" },
+	[3] = { power = 120_000, cash = 5_000_000, skin = "Shadow Mask" },
+	[4] = { power = 1_200_000, cash = 50_000_000, skin = "Storm Aura" },
+	[5] = { power = 12_000_000, cash = 500_000_000, skin = "Frost Trail" },
+	[6] = { power = 120_000_000, cash = 5_000_000_000, skin = "Ember Wings" },
+	[7] = { power = 1_200_000_000, cash = 50_000_000_000, skin = "Abyss Crown" },
+	[8] = { power = 12_000_000_000, cash = 500_000_000_000, skin = "Golem Armour" },
+	[9] = { power = 120_000_000_000, cash = 5_000_000_000_000, skin = "Celestial Halo" },
+	[10] = { power = 1_200_000_000_000, cash = 50_000_000_000_000, skin = "Sakura Void Form" },
 }
 
 local Fighters = {

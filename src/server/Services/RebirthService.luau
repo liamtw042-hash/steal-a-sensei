@@ -21,14 +21,14 @@ local DataService: any
 local FighterService: any
 local CarryService: any
 local BaseService: any
-local SpeedService: any
+local PowerService: any
 
 function RebirthService:KnitInit()
 	DataService = Knit.GetService("DataService")
 	FighterService = Knit.GetService("FighterService")
 	CarryService = Knit.GetService("CarryService")
 	BaseService = Knit.GetService("BaseService")
-	SpeedService = Knit.GetService("SpeedService")
+	PowerService = Knit.GetService("PowerService")
 end
 
 function RebirthService:CanRebirth(player: Player): (boolean, string)
@@ -82,7 +82,7 @@ function RebirthService:DoRebirth(player: Player): (boolean, string)
 
 	DataService:Replicate(player)
 	BaseService:RefreshAttributes(player)
-	SpeedService:Refresh(player)
+	PowerService:Refresh(player)
 	self.Client.Rebirthed:Fire(player, newCount)
 	BaseService:Notify(player, `Rebirth {newCount}! Cash x{Config.Rebirth.multiplier(newCount)}`, "info")
 	return true, `Rebirth {newCount}`

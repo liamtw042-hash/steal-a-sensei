@@ -1,6 +1,6 @@
 --!strict
 --[[
-	ShopController: Speed passes, other gamepasses, combat shop (dev products), rift token
+	ShopController: Power passes, other gamepasses, combat shop (dev products), rift token
 	shop, plus the Free Rewards window (like + favourite + group).
 ]]
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -9,7 +9,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage.Packages.Knit) :: any
 local Config = require(ReplicatedStorage.Shared.Config)
 local Format = require(ReplicatedStorage.Shared.Util.Format)
-local SpeedMath = require(ReplicatedStorage.Shared.Util.SpeedMath)
+local PowerMath = require(ReplicatedStorage.Shared.Util.PowerMath)
 local Make = require(script.Parent.Parent.UI.Make)
 local Theme = require(script.Parent.Parent.UI.Theme)
 local Window = require(script.Parent.Parent.UI.Window)
@@ -20,7 +20,7 @@ local ShopController = Knit.CreateController({ Name = "ShopController" })
 local shop: Window.Window
 local rewards: Window.Window
 local pages: { [string]: Frame }
-local speedScroll: ScrollingFrame
+local powerScroll: ScrollingFrame
 local passScroll: ScrollingFrame
 local combatScroll: ScrollingFrame
 local tokenScroll: ScrollingFrame
@@ -50,8 +50,8 @@ end
 
 function ShopController:_build()
 	shop = Window.new("Shop", "🛒 Shop", UDim2.fromOffset(720, 520))
-	pages = Window.tabs(shop.content, { "Speed", "Passes", "Combat", "Rift Tokens" })
-	speedScroll = Make.scroll({ Parent = pages.Speed }, 6)
+	pages = Window.tabs(shop.content, { "Power", "Passes", "Combat", "Rift Tokens" })
+	powerScroll = Make.scroll({ Parent = pages.Power }, 6)
 	passScroll = Make.scroll({ Parent = pages.Passes }, 6)
 	combatScroll = Make.scroll({ Parent = pages.Combat }, 6)
 	tokenScroll = Make.scroll({ Parent = pages["Rift Tokens"] }, 6)
@@ -79,22 +79,22 @@ function ShopController:Refresh()
 		return
 	end
 
-	-- Speed ladder
-	clear(speedScroll)
+	-- Power ladder
+	clear(powerScroll)
 	Make.text({
-		Text = `Your multiplier: <b>x{Format.short(SpeedMath.gamepassMultiplier(data.gamepasses))}</b>. Each pass stacks multiplicatively, <b>capped at x{Config.Speed.MaxMultiplier} total</b>.`,
+		Text = `Your multiplier: <b>x{Format.short(PowerMath.gamepassMultiplier(data.gamepasses))}</b>. Each pass stacks multiplicatively, <b>capped at x{Config.Power.MaxMultiplier} total</b>.`,
 		TextColor3 = Theme.muted,
 		Size = UDim2.new(1, 0, 0, 22),
-		Parent = speedScroll,
+		Parent = powerScroll,
 	})
 	for _, def in Config.Monetization.Gamepasses do
-		if not def.key:match("^Speed") then
+		if not def.key:match("^Power") then
 			continue
 		end
-		local card = Make.card({ Parent = speedScroll })
+		local card = Make.card({ Parent = powerScroll })
 		local row = Make.row({ Size = UDim2.new(1, 0, 0, 34), Parent = card })
 		Make.text({
-			Text = `⚡ <b>{def.name}</b>  <font color="#{Theme.muted:ToHex()}">{def.description}</font>`,
+			Text = `💪 <b>{def.name}</b>  <font color="#{Theme.muted:ToHex()}">{def.description}</font>`,
 			Size = UDim2.new(1, -130, 1, 0),
 			Parent = row,
 		})
@@ -110,7 +110,7 @@ function ShopController:Refresh()
 	-- Other passes
 	clear(passScroll)
 	for _, def in Config.Monetization.Gamepasses do
-		if def.key:match("^Speed") then
+		if def.key:match("^Power") then
 			continue
 		end
 		local card = Make.card({ Parent = passScroll })
@@ -193,16 +193,16 @@ function ShopController:RefreshRewards()
 		return
 	end
 	local DataController = Knit.GetController("DataController")
-	local SpeedService = Knit.GetService("SpeedService")
+	local PowerService = Knit.GetService("PowerService")
 	local data = DataController:Get()
 	if not data then
 		return
 	end
 	clear(rewardsFrame)
-	local FR = Config.Speed.FreeRewards
-	local total = FR.like.speed + FR.favourite.speed + FR.group.speed
+	local FR = Config.Power.FreeRewards
+	local total = FR.like.power + FR.favourite.power + FR.group.power
 	Make.text({
-		Text = `Claim all three for <b>{Format.short(total)} free speed</b>.`,
+		Text = `Claim all three for <b>{Format.short(total)} free Power</b>.`,
 		TextSize = 17,
 		Size = UDim2.new(1, 0, 0, 24),
 		Parent = rewardsFrame,
@@ -211,19 +211,19 @@ function ShopController:RefreshRewards()
 		{
 			key = "like",
 			label = "👍 " .. FR.like.label,
-			speed = FR.like.speed,
+			power = FR.like.power,
 			hint = "Hit the thumbs-up on the game page, then claim.",
 		},
 		{
 			key = "favourite",
 			label = "⭐ " .. FR.favourite.label,
-			speed = FR.favourite.speed,
+			power = FR.favourite.power,
 			hint = "Hit the star on the game page, then claim.",
 		},
 		{
 			key = "group",
 			label = "👥 " .. FR.group.label,
-			speed = FR.group.speed,
+			power = FR.group.power,
 			hint = "Join the group, then claim (checked for real).",
 		},
 	}
@@ -232,7 +232,7 @@ function ShopController:RefreshRewards()
 		local card = Make.card({ Parent = rewardsFrame })
 		local row = Make.row({ Size = UDim2.new(1, 0, 0, 34), Parent = card })
 		Make.text({
-			Text = `<b>{it.label}</b>  +{Format.short(it.speed)} speed`,
+			Text = `<b>{it.label}</b>  +{Format.short(it.power)} Power`,
 			Size = UDim2.new(1, -150, 1, 0),
 			Parent = row,
 		})
@@ -251,7 +251,7 @@ function ShopController:RefreshRewards()
 			end
 			btn.Text = "Checking..."
 			task.spawn(function()
-				local ok, msg = SpeedService:ClaimFreeReward(key)
+				local ok, msg = PowerService:ClaimFreeReward(key)
 				Toast.show(msg, if ok then "success" else "warn")
 				self:RefreshRewards()
 			end)
