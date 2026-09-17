@@ -33,7 +33,7 @@ local function invisibleWall(size: Vector3, cf: CFrame, parent: Instance)
 	)
 end
 
--- Punching bag: hold E here to train Power. Returns the bag body (the part that swings).
+-- Punching bag: hold the punch input here to train Power. Returns the bag body (the part that swings).
 local function punchingBag(cf: CFrame, parent: Instance): Part
 	local m = Build.model("PunchingBagProp", parent)
 	-- mat you stand on
@@ -90,7 +90,7 @@ local function punchingBag(cf: CFrame, parent: Instance): Part
 		Enum.Material.Neon,
 		m
 	)
-	Build.label(bag, "🥊 PUNCHING BAG\nhold E to train", Color3.fromRGB(255, 190, 120), 5, 210, 55)
+	Build.label(bag, "🥊 PUNCHING BAG\nhold to train", Color3.fromRGB(255, 190, 120), 5, 210, 55)
 	return bag
 end
 
@@ -261,16 +261,8 @@ function Bases.build(parent: Folder, index: number)
 	bag.Name = "PunchingBag"
 	bag.Parent = bf
 
-	-- hold-E training prompt + the upgrade prompt (PowerService fills in the cost)
-	local train = Instance.new("ProximityPrompt")
-	train.Name = "TrainPrompt"
-	train.ActionText = "Train"
-	train.ObjectText = "Punching Bag"
-	train.KeyboardKeyCode = Enum.KeyCode.E
-	train.HoldDuration = 86400 -- never completes; we act on hold begin/end instead
-	train.MaxActivationDistance = 12
-	train.RequiresLineOfSight = false
-	train.Parent = bag
+	-- Training input is bound client-side (left mouse / R2 / the mobile button), so the bag only
+	-- carries the upgrade prompt. PowerService fills in its cost text.
 	local upgrade = Instance.new("ProximityPrompt")
 	upgrade.Name = "UpgradePrompt"
 	upgrade.ActionText = "Upgrade"

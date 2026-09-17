@@ -36,24 +36,25 @@ local Power = {
 	},
 
 	--[[
-		Punching bag: walk up to the bag in your base, hold E (tap and hold on mobile) and
-		you gain Power every `tickSeconds`. Five levels, bought with cash. See docs/ECONOMY.md.
+		Punching bag: walk up to the bag in your base and hold the punch input (left mouse on PC,
+		right trigger on gamepad, the on-screen button on mobile). You gain Power every
+		`tickSeconds`. Five levels, bought with cash. See docs/ECONOMY.md.
 
 		Level | Power per punch | cost to reach
-		    1 |              25 | free
-		    2 |           1,000 | $5K
-		    3 |          40,000 | $500K
-		    4 |       1,600,000 | $50M
-		    5 |      64,000,000 | $10B
+		    1 |               1 | free
+		    2 |              10 | $500
+		    3 |             100 | $50K
+		    4 |           1,000 | $5M
+		    5 |          10,000 | $500M
 	]]
 	PunchingBag = {
 		maxLevel = 5,
 		tickSeconds = 1, -- one punch per second while held
 		range = 14, -- studs; the server stops training if you walk further than this from the bag
 		-- Power granted per punch at each level
-		powerPerPunch = { 25, 1_000, 40_000, 1_600_000, 64_000_000 },
+		powerPerPunch = { 1, 10, 100, 1_000, 10_000 },
 		-- Cash cost to go from level N to N+1 (index N)
-		upgradeCost = { 5_000, 500_000, 50_000_000, 10_000_000_000 },
+		upgradeCost = { 500, 50_000, 5_000_000, 500_000_000 },
 	},
 
 	-- Multiplicative Power gamepasses. `key` matches Config.Monetization.Gamepasses.

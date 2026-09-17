@@ -2,15 +2,18 @@
 --[[
 	TrainingController: the punching bag.
 
-	Hold E at your bag (tap and hold on mobile) and the server ticks Power up once a second.
-	This controller turns the prompt's hold begin/end into StartTraining/StopTraining calls and
-	draws the "Training..." panel: a bar that fills each punch, the Power per punch, and the
-	live Power total climbing. Pressing F at the bag buys the next upgrade level.
+	Stand at your bag and hold the punch input — left mouse button on PC, right trigger (R2) on
+	a gamepad, or the on-screen button on mobile — and the server ticks Power up once a second.
+	The action is only bound while you're in range of your own bag, so left-click behaves
+	normally everywhere else. Pressing F at the bag buys the next upgrade level.
 ]]
+local ContextActionService = game:GetService("ContextActionService")
 local Players = game:GetService("Players")
 local ProximityPromptService = game:GetService("ProximityPromptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
 
 -- Knit's package entry is typed as the server half; the client half is dynamic, so treat it as `any`.
 local Knit = require(ReplicatedStorage.Packages.Knit) :: any
@@ -22,6 +25,8 @@ local Toast = require(script.Parent.Parent.UI.Toast)
 
 local TrainingController = Knit.CreateController({ Name = "TrainingController" })
 
+local ACTION = "StealASenseiTrain"
+
 local localPlayer = Players.LocalPlayer
 
 local panel: Frame
@@ -30,8 +35,11 @@ local titleLabel: TextLabel
 local totalLabel: TextLabel
 local perPunchLabel: TextLabel
 local popupHolder: Frame
+local hint: Frame
+local hintLabel: TextLabel
 
 local holding = false
+local bound = false
 
 function TrainingController:KnitInit()
 	local gui = Make.screen("Training", 6)
@@ -104,15 +112,50 @@ function TrainingController:KnitInit()
 		Visible = false,
 		Parent = gui,
 	})
+
+	-- "hold X to train" hint, shown while you're stood at the bag and not yet training
+	hint = Make.frame({
+		Name = "Hint",
+		Size = UDim2.fromOffset(330, 44),
+		Position = UDim2.new(0.5, 0, 0.5, 0),
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		BackgroundColor3 = Theme.panel,
+		Visible = false,
+		Parent = gui,
+	})
+	Make.corner(hint)
+	Make.outline(hint)
+	Make.shadow(hint, 5)
+	Make.padding(hint, 12, 6)
+	hintLabel = Make.display({
+		Text = "",
+		TextSize = 18,
+		TextColor3 = Theme.gold,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		Size = UDim2.fromScale(1, 1),
+		Parent = hint,
+	})
+end
+
+-- What to tell the player to hold, based on what they're playing on
+local function inputHint(): string
+	if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
+		return "Hold the 🥊 button to train"
+	elseif UserInputService.GamepadEnabled and not UserInputService.KeyboardEnabled then
+		return "Hold R2 to train"
+	end
+	return "Hold left mouse to train"
 end
 
 function TrainingController:_setPanel(active: boolean)
 	panel.Visible = active
 	popupHolder.Visible = active
 	if active then
+		hint.Visible = false
 		self:_refreshLabels()
 	else
 		barFill.Size = UDim2.fromScale(0, 1)
+		hint.Visible = bound
 	end
 end
 
@@ -157,8 +200,7 @@ function TrainingController:_start()
 		return
 	end
 	holding = true
-	local PowerService = Knit.GetService("PowerService")
-	PowerService:StartTraining()
+	Knit.GetService("PowerService"):StartTraining()
 end
 
 function TrainingController:_stop()
@@ -166,34 +208,54 @@ function TrainingController:_stop()
 		return
 	end
 	holding = false
-	local PowerService = Knit.GetService("PowerService")
-	PowerService:StopTraining()
+	Knit.GetService("PowerService"):StopTraining()
+end
+
+-- The bag in the player's own base, or nil if they have no base yet
+function TrainingController:_myBag(): BasePart?
+	local idx = Knit.GetService("BaseService").BaseIndex:Get()
+	if typeof(idx) ~= "number" or idx <= 0 then
+		return nil
+	end
+	local bases = Workspace:FindFirstChild("Bases")
+	local folder = if bases then bases:FindFirstChild("Base" .. idx) else nil
+	local bag = if folder then folder:FindFirstChild("PunchingBag") else nil
+	return if bag and bag:IsA("BasePart") then bag else nil
+end
+
+function TrainingController:_bind()
+	if bound then
+		return
+	end
+	bound = true
+	ContextActionService:BindAction(ACTION, function(_action: string, state: Enum.UserInputState)
+		if state == Enum.UserInputState.Begin then
+			self:_start()
+		elseif state == Enum.UserInputState.End or state == Enum.UserInputState.Cancel then
+			self:_stop()
+		end
+		-- Pass so a left click still reaches everything else (UI, tools, the rift boss)
+		return Enum.ContextActionResult.Pass
+	end, true, Enum.UserInputType.MouseButton1, Enum.KeyCode.ButtonR2)
+	ContextActionService:SetTitle(ACTION, "🥊")
+	hintLabel.Text = inputHint()
+	hint.Visible = not panel.Visible
+end
+
+function TrainingController:_unbind()
+	if not bound then
+		return
+	end
+	bound = false
+	ContextActionService:UnbindAction(ACTION)
+	hint.Visible = false
+	self:_stop()
 end
 
 function TrainingController:KnitStart()
 	local PowerService = Knit.GetService("PowerService")
 	local DataController = Knit.GetController("DataController")
 
-	local function isTrainPrompt(prompt: ProximityPrompt): boolean
-		return prompt.Name == "TrainPrompt"
-	end
-
-	ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt: ProximityPrompt, player: Player)
-		if player == localPlayer and isTrainPrompt(prompt) then
-			self:_start()
-		end
-	end)
-	ProximityPromptService.PromptButtonHoldEnded:Connect(function(prompt: ProximityPrompt, player: Player)
-		if player == localPlayer and isTrainPrompt(prompt) then
-			self:_stop()
-		end
-	end)
-	-- walking away (or the prompt being hidden for any reason) also stops the hold
-	ProximityPromptService.PromptHidden:Connect(function(prompt: ProximityPrompt)
-		if isTrainPrompt(prompt) then
-			self:_stop()
-		end
-	end)
 	ProximityPromptService.PromptTriggered:Connect(function(prompt: ProximityPrompt, player: Player)
 		if player == localPlayer and prompt.Name == "UpgradePrompt" then
 			local ok, msg = PowerService:UpgradeBag()
@@ -203,6 +265,7 @@ function TrainingController:KnitStart()
 
 	localPlayer.CharacterAdded:Connect(function()
 		holding = false
+		self:_unbind()
 	end)
 
 	PowerService.Training:Observe(function(active: boolean)
@@ -214,6 +277,25 @@ function TrainingController:KnitStart()
 	DataController.PowerChanged:Connect(function()
 		if panel.Visible then
 			self:_refreshLabels()
+		end
+	end)
+
+	-- bind the punch input only while stood at your own bag
+	task.spawn(function()
+		while true do
+			task.wait(0.25)
+			local bag = self:_myBag()
+			local char = localPlayer.Character
+			local root = if char then char:FindFirstChild("HumanoidRootPart") else nil
+			local inRange = bag ~= nil
+				and root ~= nil
+				and root:IsA("BasePart")
+				and (root.Position - (bag :: BasePart).Position).Magnitude <= Config.Power.PunchingBag.range
+			if inRange then
+				self:_bind()
+			else
+				self:_unbind()
+			end
 		end
 	end)
 end

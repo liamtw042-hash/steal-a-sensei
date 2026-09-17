@@ -310,10 +310,10 @@ function BaseController:Refresh()
 	local nextCost = Config.Power.bagUpgradeCost(data.bagLevel)
 	Make.text({
 		Text = if nextCost
-			then `Hold <b>E</b> at the bag in your base to train. <b>{Format.short(
+			then `Hold <b>left mouse</b> (R2 on gamepad) at the bag in your base to train. <b>{Format.short(
 				Config.Power.punchPower(data.bagLevel)
 			)} Power</b> per punch. Next level: {Format.short(Config.Power.punchPower(data.bagLevel + 1))} per punch.`
-			else `Hold <b>E</b> at the bag in your base to train. <b>{Format.short(
+			else `Hold <b>left mouse</b> (R2 on gamepad) at the bag in your base to train. <b>{Format.short(
 				Config.Power.punchPower(data.bagLevel)
 			)} Power</b> per punch — fully upgraded.`,
 		TextColor3 = Theme.muted,

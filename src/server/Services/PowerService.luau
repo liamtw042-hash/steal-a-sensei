@@ -5,9 +5,10 @@
 	Owns the Power stat -> WalkSpeed pipeline, movement modifiers (slows, stuns, boosts),
 	punching-bag training, bag upgrades and the free-reward claims.
 
-	Training: the client calls StartTraining when the player holds E at their bag and
-	StopTraining when they let go. The server validates ownership, range, and liveness on
-	every punch, so holding the key is the only thing the client actually controls.
+	Training: the client calls StartTraining while the player holds the punch input (left mouse,
+	gamepad R2, or the on-screen button on mobile) at their bag, and StopTraining when they let
+	go. The server validates ownership, range and liveness on every punch, so holding the input
+	is the only thing the client actually controls.
 ]]
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")

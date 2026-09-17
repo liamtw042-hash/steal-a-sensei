@@ -42,7 +42,7 @@ Inside **each** base folder (Folder or Model):
 | `Entrance` | Part | A pad just outside the gate. Bosses camp here; ejected intruders land here. |
 | `Gates` | Folder of Parts | One or more laser-wall Parts across the entrance. Set `CanCollide = false`; the scripts handle collision per player. Give them a Neon look. |
 | `LockPad` | Part | Owner steps on it to lock the base. |
-| `PunchingBag` | Part | Owner holds E at it to train Power. The scripts add the Train (E) and Upgrade (F) prompts, and swing this part on each punch, so make it the bag body. |
+| `PunchingBag` | Part | Owner holds the punch input (left mouse / gamepad R2 / the on-screen button on mobile) near it to train Power. The scripts add the Upgrade (F) prompt, bind the training input while the owner is in range, and swing this part on each punch, so make it the bag body. |
 | `Spawn` | Part | Where the owner respawns. |
 | `Slots` | Folder of Parts | `Slot1` … `SlotN`. Each Part needs a **number attribute `Floor`** = 1, 2 or 3. Floor 1 needs at least 10, floors 2 and 3 at least 8 each. Add extra Floor-1 slots (e.g. `Slot27`+) if you want rebirth/+5-slot bonuses usable before floor 2 unlocks. |
 | `Sign` | Part | *optional* Invisible part above the gate; gets an owner-name billboard. |

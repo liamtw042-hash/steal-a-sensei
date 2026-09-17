@@ -26,27 +26,37 @@ evolves the fighter into a random fighter of the next rarity (or its `evolvesInt
 
 **Fuse:** 3 fighters with the same name → 1 random fighter of the next rarity.
 
-**Punching bag** (`Power.PunchingBag`): walk up to the bag in your base, hold E, and you land
-one punch a second. Five levels, bought with cash.
+**Punching bag** (`Power.PunchingBag`): walk up to the bag in your base and hold the punch
+input (left mouse on PC, R2 on gamepad, the on-screen button on mobile). One punch a second.
+Five levels, bought with cash.
 
 | Level | Power / punch | Power / minute held | cost to reach |
 | --- | --- | --- | --- |
-| 1 | 25 | 1.5K | free |
-| 2 | 1,000 | 60K | $5K |
-| 3 | 40,000 | 2.4M | $500K |
-| 4 | 1,600,000 | 96M | $50M |
-| 5 | 64,000,000 | 3.84B | $10B |
+| 1 | 1 | 60 | free |
+| 2 | 10 | 600 | $500 |
+| 3 | 100 | 6K | $50K |
+| 4 | 1,000 | 60K | $5M |
+| 5 | 10,000 | 600K | $500M |
 
-Each level carries you roughly two zones. Time to reach a zone gate from zero, holding E:
+Each level is worth one zone step: at the level you can afford, the next gate is about
+8 minutes of holding.
 
-| Zone | Power needed | at the level you'd own by then |
-| --- | --- | --- |
-| 2 Bamboo Forest | 5K | free rewards cover it (10K) |
-| 4 Storm Peak | 500K | Lv 2 → 8 min |
-| 6 Volcanic Dojo | 50M | Lv 3 → 21 min |
-| 8 Ancient Ruins | 5B | Lv 4 → 52 min |
-| 10 Sakura Void | 500B | Lv 5 → 2.2 h (index rewards cut this a lot) |
+| Zone | Power needed | bag level | time holding |
+| --- | --- | --- | --- |
+| 2 Bamboo Forest | 5K | 2 | 8 min (free rewards give 10K anyway) |
+| 3 Shadow Village | 50K | 3 | 8 min |
+| 4 Storm Peak | 500K | 4 | 8 min |
+| 5 Frozen Temple | 5M | 5 | 8 min |
+| 6 Volcanic Dojo | 50M | 5 | 83 min |
+| 7 Abyss Shrine | 500M | 5 | 14 h |
+| 8+ | 5B and up | 5 | not reachable by punching alone |
 
+**The bag tops out at zone 6.** From zone 7 on, Power has to come from index rewards
+(+1.2M at zone 4, +12M at 5, +120M at 6, +1.2B at 7, +12B at 8, +120B at 9) and the Power
+gamepasses, which multiply the stat up to 1024x. In practice a zone's Index set unlocks the
+zone about two ahead of it, so the late game is collect-a-set rather than hold-the-button.
+If you'd rather the bag carried players further, raise `powerPerPunch[5]` — that one number
+is the whole late-game curve.
 **Zone Power gates** are unchanged from the brief (5K, 50K, 500K, 5M, 50M, 500M, 5B, 50B, 500B).
 
 ## Why it hits the targets
@@ -62,9 +72,9 @@ time, two Uncommon names in the roster → ~6 Uncommon hatches for a matching th
 
 **Rebirth 5 in ~1 day.**
 Rebirths 2–4 need $2.5M / $10M / $50M with the 2x–4x multiplier stacking; Rares (600/s)
-from zone 4 need 500K Power, which bag level 2 delivers in ~8 minutes of holding E (level 2
-costs $5K, affordable in the first few minutes). Epics (3,000/s) need zone 6
-(50M Power): bag level 3 ($500K — affordable around rebirth 1) makes 50M in ~21 minutes.
+from zone 4 need 500K Power, which bag level 4 delivers in ~8 minutes of holding (level 4
+costs $5M, affordable around rebirth 2-3). Epics (3,000/s) need zone 6
+(50M Power): bag level 5 ($500M) makes 50M in ~83 minutes, or the zone 5 index set gives 12M outright.
 Legendary for rebirth 5 comes from fusing 3 Epics (or evolving one
 Epic to level 10 = 2 hours placed). $250M at 5x multiplier with ten Epics (150K/s) is
 ~28 minutes. Total: 6–8 hours of play plus bag time.
@@ -72,10 +82,10 @@ Epic to level 10 = 2 hours placed). $250M at 5x multiplier with ten Epics (150K/
 **Rebirth 10 in ~1 week.**
 $1T at the 10x multiplier with 26 slots of Legendaries (40K/s each → 10.4M/s) is ~27
 hours of placed time; Golden/Void mutations and evolutions shorten that a lot. The
-Mythic comes from fusing 3 Legendaries (zone 8–9, 5B Power → bag level 4 at $50M, well
-inside rebirth 4–5 income) or from zone 10 at 500B Power (bag level 5 at $10B for ~2.2h of
-holding E, or the zone 9 index reward of +120B Power). Rebirths 6–9 need $1B–$150B, each 1–4 hours at their multipliers. Total: roughly 5–7 days of an
-hour or two a day plus bag time.
+Mythic comes from fusing 3 Legendaries (zone 8–9 needs 5B–50B Power, which comes from the
+zone 7–8 index sets at +1.2B and +12B) or from zone 10 at 500B Power (the zone 9 index set
+gives +120B, and the Power passes multiply it). Rebirths 6–9 need $1B–$150B, each 1–4 hours at their multipliers. Total: roughly 5–7 days of an
+hour or two a day plus bag and index time.
 
 ## Knobs to turn if it's off
 

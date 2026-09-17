@@ -7,7 +7,7 @@
 	  - Entrance   (Part)   just outside the gate (boss camps here, intruders are ejected here).
 	  - Gates      (Folder) one or more Parts that become laser walls when locked.
 	  - LockPad    (Part)   step on it to lock.
-	  - PunchingBag (Part)  hold E at it to train Power.
+	  - PunchingBag (Part)  hold the punch input at it to train Power.
 	  - Spawn      (Part)   where the owner respawns.
 	  - Slots      (Folder) Parts named Slot1..SlotN with a "Floor" number attribute (1, 2 or 3).
 	  - Sign       (Part)   optional, gets a BillboardGui with the owner's name.
